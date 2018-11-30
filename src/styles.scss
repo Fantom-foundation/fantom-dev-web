@@ -1,0 +1,34 @@
+@import './app-theme';
+@import './styles/api';
+@import './styles/markdown';
+@import './styles/tables';
+@import './styles/general';
+
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$fantom-dev-primary: mat-palette($mat-indigo);
+$fantom-dev-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$fantom-dev-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$fantom-dev-theme: mat-light-theme($fantom-dev-primary, $fantom-dev-accent, $fantom-dev-warn);
+
+
+$fantom-dev-light-www-theme: mat-light-theme($fantom-dev-primary, $fantom-dev-accent);
+
+$dark-primary: mat-palette($mat-deep-orange);
+$dark-accent: mat-palette($mat-amber, A200, A100, A400);
+$dark-warn: mat-palette($mat-deep-purple);
+$fantom-dev-dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+@include angular-material-theme($fantom-dev-theme);
+@include fantom-dev-theme($fantom-dev-theme);
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

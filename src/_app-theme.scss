@@ -1,0 +1,57 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+@import './app/navbar/navbar-theme';
+@import './app/footer/footer-theme';
+@import './app/root/root-theme';
+@import './styles/api-theme';
+@import './styles/markdown-theme';
+@import './styles/svg-theme';
+@import './styles/tables-theme';
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+
+@mixin fantom-dev-theme($theme) {
+  // Include theme styles for core and each component used in your app.
+  // Alternatively, you can import and @include the theme mixins for each component
+  // that you are using.
+  @include angular-material-theme($theme);
+
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $next-theme: mat-palette($mat-red);
+
+  .docs-app-background {
+    background: mat-color($background, background);
+  }
+
+  .docs-primary-header {
+    background: mat-color($primary);
+
+    h1 {
+      color: mat-color($primary, default-contrast);
+    }
+  }
+
+  .docs-footer {
+    background: mat-color($primary);
+    color: mat-color($primary, default-contrast);
+  }
+
+  .is-next-version {
+    background: mat-color($next-theme, 900) !important;
+  }
+
+  @include docs-site-api-theme($theme);
+  @include docs-site-markdown-theme($theme);
+  @include docs-site-svg-theme($theme);
+  @include docs-site-tables-theme($theme);
+  @include home-page-theme($theme);
+  @include nav-bar-theme($theme);
+  @include footer-theme($theme);
+}
