@@ -1,9 +1,9 @@
 {
   "name": "fantom-dev",
-  "version": "0.0.1-alpha",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "node patch.js ng serve",
+    "start": "node scripts/patch.js ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -46,6 +46,7 @@
     "@types/node": "^10.12.10",
     "angular-cli-ghpages": "^0.5.3",
     "codelyzer": "~4.5.0",
+    "github-wiki-to-html": "https://api.github.com/repos/SamuelMarks/github-wiki-to-html/tarball",
     "jasmine-core": "~3.3.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.1",

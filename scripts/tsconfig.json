@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    // "typeRoots": [],                       /* List of folders to include type definitions from. */
+    "downlevelIteration": true,
+    "esModuleInterop": true
+  }
+}
