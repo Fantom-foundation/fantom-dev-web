@@ -47,8 +47,8 @@ First [`npm i -g angular-cli-ghpages`](https://github.com/angular-schule/angular
 
     ng build --prod
     cp README.md dist/fantom-dev
-    ngh -c <CNAME goes here> --dir='dist/fantom-dev' --repo=https://github.com/Fantom-foundation/fantom-dev.github.io --branch='master' --message='Using angular-cli-ghpages'
+    ngh --dir='dist/fantom-dev' --message='Using angular-cli-ghpages' --repo='https://github.com/Fantom-foundation/Fantom-foundation.github.io' --branch='master'
 
 ## Derived
 
-Header, footer and subpage stolen from [https://material.angular.io](https://material.angular.io) ([src](https://github.com/angular/material.angular.io)); infographic [stolen from the Canadians](https://github.com/bcgov/interactive-infographic).
+Header, footer and subpage stolen from [https://material.angular.io](https://material.angular.io) ([src](https://github.com/angular/material.angular.io)).

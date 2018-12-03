@@ -1,15 +1,12 @@
 <div class="docs-markdown pad">
   <h5 class="docs-markdown-h5">
-    Provision nodes onto 50+ public and private clouds, and deploy to them.
+    Getting started developing on Fantom
   </h5>
 
   <p class="docs-markdown-p">
-    At its core,
     <a href="https://github.com/Fantom-foundation" class="docs-markdown-a" target="_blank">
-      fantom-dev
-    </a> is based around two major Python libraries: <a href="http://www.fabfile.org" class="docs-markdown-a"
-                                                        target="_blank">Fabric</a> and
-    <a href="https://libcloud.apache.org" class="docs-markdown-a" target="_blank">Apache Libcloud</a>.
+      Fantom foundation
+    </a> is made up of a number of repositories. This will guide you through getting your development environment setup.
   </p>
 
   <p class="docs-markdown-p" *ngIf="os('Linux')">
@@ -64,230 +61,33 @@
       <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code">
         git --version
         cl /?
-        python --version
       </code></pre>
     </section>
-    <p class="docs-markdown-p">
-      Now ensure this outputs something like "Python 2.7.14". If >3, switch to <code>python2</code> and
-      <code>pip2</code> executables for rest of guide.</p>
-    <code class="lang-bash docs-markdown-code">
-      python --version
-    </code>
-
   </section>
 
-  <section id="step-1-install-etcd">
+  <section id="step-1-install-go">
     <h3
       class="docs-header-link docs-markdown-h3">
-      Step 1: Install etcd
+      Step 1: Install Go
     </h3>
 
-    <p class="docs-markdown-p" *ngIf="os('Linux')">
-      Extract <code>etcd</code> and <code>etcdctl</code> from <a class="docs-markdown-a"
-                                                                 href="https://github.com/coreos/etcd/releases/download/v2.3.8/etcd-v2.3.8-linux-amd64.tar.gz">etcd-v2.3.8-linux-amd64.tar.gz</a>
-      into somewhere in your PATH; e.g.: <code>/usr/local/bin</code>.
-    </p>
-    <p class="docs-markdown-p" *ngIf="os('macOS')">
-      Extract <code>etcd</code> and <code>etcdctl</code> from <a class="docs-markdown-a"
-                                                                 href="https://github.com/coreos/etcd/releases/download/v2.3.8/etcd-v2.3.8-darwin-amd64.zip">etcd-v2.3.8-darwin-amd64.zip</a>
-      into somewhere in your PATH; e.g.: <code>/usr/local/bin</code>.
-    </p>
+    <pre class="docs-markdown-pre" *ngIf="os('Linux')"><code class="lang-bash docs-markdown-code">
+        curl https://dl.google.com/go/go1.11.2.linux-amd64.tar.gz -o go.linux-amd64.tar.gz
+        tar -C /usr/local -xzf go.linux-amd64.tar.gz
+        sudo bash -c "GOPATH=$HOME/go >> /etc/environment"
+      </code></pre>
+
+    <pre class="docs-markdown-pre" *ngIf="os('macOS')"><code class="lang-bash docs-markdown-code">
+        brew install go
+      </code></pre>
+
     <p class="docs-markdown-p" *ngIf="os('Windows')">
-      Extract <code>etcd.exe</code> and <code>etcdctl.exe</code> from <a class="docs-markdown-a"
-                                                                         href="https://github.com/coreos/etcd/releases/download/v2.3.8/etcd-v2.3.8-windows-amd64.zip">etcd-v2.3.8-windows-amd64.zip</a>
-      into somewhere in your PATH.
+      Official Go installer: <a href="https://dl.google.com/go/go1.11.2.windows-amd64.msi">go1.11.2.windows-amd64.msi</a>
     </p>
-
-    <p class="docs-markdown-p">Test that it installed correctly&mdash;and has executable permissions&mdash;with:</p>
-    <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code">
-      etcd --version
-      etcdctl --version
-    </code></pre>
-  </section>
-
-  <section id="step-2-prepare-libraries">
-    <h3
-      class="docs-header-link docs-markdown-h3">
-      Step 2: Prepare Python libraries
-    </h3>
-
-    <p class="docs-markdown-p">
-      Let's begin by cloning all the repositories of the fantom-dev organisation, we'll use <code>gitim</code> which I
-      extended with organisation support:
-    </p>
-    <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code">
-      pip install https://api.github.com/repos/SamuelMarks/gitim/tarball/v2#egg=gitim
-      python -m gitim -u $YOUR_GITHUB_USERNAME -o fantom-dev -d fantom-dev
-    </code></pre>
-
-    <p class="docs-markdown-p">
-      Now install them all. <a href="https://virtualenv.pypa.io" class="docs-markdown-a" target="_blank">virtualenv</a>
-      is highly recommended.
-    </p>
-
-    <p class="docs-markdown-p">
-      Since we're in development mode, let's skip the <code>requirements.txt</code> and just brute-force install them
-      all locally. Pick the right <a href="https://gist.github.com/SamuelMarks/6555ca996ce11787515af25f1d2d2a83"
-                                     class="docs-markdown-a" target="_blank"><code>pip_install_all</code></a> script for
-      your OS, then run:
-    </p>
-
-    <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code" *ngIf="os('macOS') || os('Linux')">
-      cd fantom-dev
-      set VENV=path/to/your/virtualenv
-      pip_install_all
-      pip_install_all
-      pip_install_all
-    </code></pre>
-    <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code" *ngIf="os('Windows')">
-      cd fantom-dev
-      set VENV=path\to\your\virtualenv
-      pip_install_all
-      pip_install_all
-      pip_install_all
-    </code></pre>
-  </section>
-
-  <section id="step-3-using-offstrategy">
-    <h3
-      class="docs-header-link docs-markdown-h3">
-      Step 3: Using offstrategy
-    </h3>
-
-    <p class="docs-markdown-p">
-      Part of the fantom-dev fabric, <a href="https://github.com/Fantom-foundation/offstrategy" class="docs-markdown-a"
-                                      target="_blank">offstrategy</a> handles: creation of nodes across multiple
-      providers.
-    </p>
-
-    <p class="docs-markdown-p">
-      First, ensure you are running the <code>etcd</code> server, e.g.: by running:
-    </p>
-
-    <code class="lang-bash docs-markdown-code">
-      etcd
-    </code>
-
-    <p class="docs-markdown-p">
-      See its <a href="https://github.com/Fantom-foundation/offstrategy/blob/master/README.md" class="docs-markdown-a"
-                 target="_blank">README.md</a> and run this for more information:
-    </p>
-
-    <code class="lang-bash docs-markdown-code">
-      python -m offstrategy -h
-    </code>
-  </section>
-
-  <section id="step-4-using-offregister">
-    <h3
-      class="docs-header-link docs-markdown-h3">
-      Step 4: Using offregister
-    </h3>
-
-    <p class="docs-markdown-p">
-      Part of the fantom-dev fabric, <a href="https://github.com/Fantom-foundation/offregister" class="docs-markdown-a"
-                                      target="_blank">offregister</a> handles: the deployment of technology onto already
-      deployed nodes.
-    </p>
-
-    <p class="docs-markdown-p">
-      See its <a href="https://github.com/Fantom-foundation/offregister/blob/master/README.md" class="docs-markdown-a"
-                 target="_blank">README.md</a> and run this for more information:
-    </p>
-
-    <code class="lang-bash docs-markdown-code">
-      python -m offregister -h
-    </code>
-
-    <p class="docs-markdown-p">
-      Configuration based deployments, you write little JSON files to specify what to deploy, where, and with what
-      customisations.
-      Here are my <a href="https://github.com/Fantom-foundation/offregister/tree/master/offregister/_config"
-                     class="docs-markdown-a"
-                     target="_blank">sample configs</a>.
-    </p>
-  </section>
-
-
-  <section id="appendix">
-    <h3
-      class="docs-header-link docs-markdown-h3">
-      Appendix
-    </h3>
-
-    <p class="docs-markdown-p">
-      Note that you don't need to of deployed your nodes with offstrategy, add arbitrary nodes using either of the
-      following methods.
-    </p>
-
-    The <code>offset</code> tool:
-    <code class="lang-json docs-markdown-code">
-      python -m offset -n any-cluster-myosversion-myremotehostname --ip 255.255.255.255 -u myremoteusername -i
-      "/Users/mylocalusername/.ssh/verysecure.pem" --purpose unclustered
-    </code>
-
-
-    <p>Alternatively, manually author JSON and add it to <code>etcd</code>:</p>
-    <!--<app-config-builder [config]="true"></app-config-builder>-->
-
-    random_node.json
-    <pre style="background-color: rgba(0, 0, 0, 0.03); font-family: 'Roboto Mono', monospace;">
- {{ '{' }}
-   "id": "any-cluster-myosversion-myremotehostname",
-   "name": "any-cluster-myosversion-myremotehostname",
-   "uuid": "any-cluster-myosversion-myremotehostname",
-   "private_ips": [
-     "255.255.255.255"
-   ],
-   "public_ips": [
-     "255.255.255.255"
-   ],
-   "extra": {{ '{' }}
-      "user_hostname_port": "myremoteusername@255.255.255.255:22",
-     "ssh_config": {{ '{' }}
-      "IdentityFile": "/Users/mylocalusername/.ssh/verysecure.pem",
-       "LogLevel": "FATAL",
-       "HostName": "255.255.255.255",
-       "IdentitiesOnly": "yes",
-       "PasswordAuthentication": "no",
-       "Host": "any-cluster-myosversion-myremotehostname",
-       "UserKnownHostsFile": "/dev/null",
-       "User": "myremoteusername",
-       "StrictHostKeyChecking": "yes",
-       "Port": "22"
-      {{ '}' }},
-     "user": "myremoteusername",
-     "provider": "azure_arm"
-      {{ '}' }},
-   "driver": "AzureNodeDriver",
-   "state": "running"
- {{ '}' }}
-    </pre>
-
-    <p class="docs-markdown-p">
-      Then you can add it to <code>etcd</code> with:
-    </p>
-
-    <code class="lang-json docs-markdown-code" *ngIf="os('macOS') || os('Linux')">
-      etcdctl set /unclustered/any-cluster-myosversion-myremotehostname "$(cat random_node.json)"
-    </code>
-
-    <pre class="docs-markdown-pre"><code class="lang-json docs-markdown-code" *ngIf="os('Windows')">
-      set /p RN={{'<'}}random_node.json
-      etcdctl set /unclustered/any-cluster-myosversion-myremotehostname "%RN%"
-    </code></pre>
   </section>
 
   <hr>
   <p class="docs-markdown-p">
     Now you have everything you need to orchestrate with fantom-dev.
-  </p>
-  <p class="docs-markdown-p">
-    Take a look around my <a href="https://github.com/Fantom-foundation" class="docs-markdown-a" target="_blank">offregister-
-    prefixed projects</a>; and you'll see how easy it is to build your own.
-  </p>
-  <p class="docs-markdown-p">
-    Tried to make it as straightforward to develop with as possible; with littler variation from everyone's "Getting
-    Started" guides needed to enable deployment through offregister. Enjoy :)
   </p>
 </div>
