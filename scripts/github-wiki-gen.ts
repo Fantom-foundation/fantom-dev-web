@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // TODO: Proper slugify
 // TODO: Compile the markdown (syntax highlighting and all)
 
