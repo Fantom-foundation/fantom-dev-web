@@ -47,7 +47,7 @@ First [`npm i -g angular-cli-ghpages`](https://github.com/angular-schule/angular
 
     ng build --prod
     cp README.md dist/fantom-dev
-    ngh --dir='dist/fantom-dev' --message='Using angular-cli-ghpages' --repo='https://github.com/Fantom-foundation/Fantom-foundation.github.io' --branch='master'
+    ngh --dir='dist/fantom-dev' --repo='https://github.com/Fantom-foundation/Fantom-foundation.github.io' --branch='master' --message='Using angular-cli-ghpages'
 
 ## Derived
 
