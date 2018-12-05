@@ -99,6 +99,25 @@ if (require.main === module) {
       });
     }
 
+    (() => {
+      const className = 'ListComponent';
+      const name = 'list';
+      const content = '<ul>' +
+        routes.map(route =>
+          '<li>' +
+          '<a routerLink=' + route.path + '>' +
+          (route.path as string).substr(1, (route.path as string).length - 2 ) + '</a>' +
+          '</li>').join('') +
+        '</ul>';
+      writeFileSync(path.join(gen, `${name}.component.ts`), component_gen(ng_prefix, name, content, void 0, className), write_options);
+      declarations.push(className);
+
+      routes.push({
+        path: '\'\'',
+        component: className as any as Type<any>
+      });
+    })();
+
     const component_imports = declarations.map(
       s => `import { ${s} } from './${camelCaseToDash(s).replace('-component', '.component')}';`
     );
