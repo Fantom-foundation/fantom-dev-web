@@ -29,22 +29,21 @@
   </em>
 
   <section id="step-0-install-build-dependencies">
-    <h3
-      class="docs-header-link docs-markdown-h3">
+    <h3 class="docs-header-link docs-markdown-h3">
       Step 0: Install build dependencies
     </h3>
     <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code" *ngIf="os('Linux')">
-      sudo apt update
-      sudo apt install build-essential git-core tcl
+sudo apt update
+sudo apt install build-essential git-core tcl
     </code></pre>
 
     <a *ngIf="os('macOS')" href="https://developer.apple.com/downloads" class="docs-markdown-a" target="_blank">
       Latest XCode and Command Line Tools
     </a>
     <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code" *ngIf="os('macOS')">
-      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-      brew update
-      brew install git
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew update
+brew install git
     </code></pre>
 
     <section class="docs-guide-content" *ngIf="os('Windows')">
@@ -59,30 +58,30 @@
       </ol>
       <p class="docs-markdown-p">Test that it installed correctly with:</p>
       <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code">
-        git --version
-        cl /?
+  git --version
+  cl /?
       </code></pre>
     </section>
   </section>
 
   <section id="step-1-install-go">
-    <h3
-      class="docs-header-link docs-markdown-h3">
+    <h3 class="docs-header-link docs-markdown-h3">
       Step 1: Install Go
     </h3>
 
     <pre class="docs-markdown-pre" *ngIf="os('Linux')"><code class="lang-bash docs-markdown-code">
-        curl https://dl.google.com/go/go1.11.2.linux-amd64.tar.gz -o go.linux-amd64.tar.gz
-        tar -C /usr/local -xzf go.linux-amd64.tar.gz
-        sudo bash -c "GOPATH=$HOME/go >> /etc/environment"
+curl https://dl.google.com/go/go1.11.2.linux-amd64.tar.gz -o go.linux-amd64.tar.gz
+tar -C /usr/local -xzf go.linux-amd64.tar.gz
+sudo bash -c "GOPATH=$HOME/go >> /etc/environment"
       </code></pre>
 
     <pre class="docs-markdown-pre" *ngIf="os('macOS')"><code class="lang-bash docs-markdown-code">
-        brew install go
+brew install go
       </code></pre>
 
     <p class="docs-markdown-p" *ngIf="os('Windows')">
-      Official Go installer: <a href="https://dl.google.com/go/go1.11.2.windows-amd64.msi">go1.11.2.windows-amd64.msi</a>
+      Official Go installer: <a
+      href="https://dl.google.com/go/go1.11.2.windows-amd64.msi">go1.11.2.windows-amd64.msi</a>
     </p>
   </section>
 
