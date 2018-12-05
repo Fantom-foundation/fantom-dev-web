@@ -1,8 +1,12 @@
 fantom-dev
 ==========
+[![Build Status](https://travis-ci.org/Fantom-foundation/fantom-dev-web.svg?branch=master)](https://travis-ci.org/Fantom-foundation/fantom-dev-web)
+
 Developer ecosystem website for the Fantom Foundation platform.
 
 Written in Angular with Material. Butchered angular.material.io.
+
+Generates from `/wiki` statically from https://github.com/Fantom-foundation/fantom-dev-web/wiki
 
 ## License
 Like most everywhere we do at Fantom Foundation, this is open-source and free to use by all (incl. commercially).
