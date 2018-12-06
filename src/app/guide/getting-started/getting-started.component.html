@@ -54,7 +54,6 @@ brew install git
           Build Tools for Visual Studio 2017
         </a></li>
         <li><a class="docs-markdown-a" href="https://git-scm.com/download/win">git</a></li>
-        <li><a class="docs-markdown-a" href="https://www.python.org/downloads/windows">Python 2.7</a></li>
       </ol>
       <p class="docs-markdown-p">Test that it installed correctly with:</p>
       <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code">
@@ -83,6 +82,26 @@ brew install go
       Official Go installer: <a
       href="https://dl.google.com/go/go1.11.2.windows-amd64.msi">go1.11.2.windows-amd64.msi</a>
     </p>
+  </section>
+
+  <section id="step-2-install-rust">
+    <h3 class="docs-header-link docs-markdown-h3">
+      Step 2: Install Rust
+    </h3>
+
+    <pre class="docs-markdown-pre" *ngIf="os('Linux') || os('macOS')"><code class="lang-bash docs-markdown-code">
+curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly
+      </code></pre>
+
+    <p class="docs-markdown-p" *ngIf="os('Windows')">
+      Official Rust installer: <a
+      href="https://win.rustup.rs/x86_64">https://win.rustup.rs/x86_64</a>
+    </p>
+    <pre class="docs-markdown-pre" *ngIf="os('Windows')"><code class="lang-bash docs-markdown-code">
+rustup set default-host x86_64-pc-windows-msvc
+rustup install nightly
+rustup default nightly
+      </code></pre>
   </section>
 
   <hr>
