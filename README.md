@@ -6,7 +6,15 @@ Developer ecosystem website for the Fantom Foundation platform.
 
 Written in Angular with Material. Butchered angular.material.io.
 
-Generates from `/wiki` statically from https://github.com/Fantom-foundation/fantom-dev-web/wiki
+Generates from `/wiki` statically from https://github.com/Fantom-foundation/fantom-dev-web/wiki, using:
+```bash
+ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-dev-web.wiki.git' -l
+```
+
+Generated from `/rfc` statically from https://github.com/Fantom-foundation/fantom-rfcs, using:
+```bash
+ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-rfcs' -l -b 'make html_body' -e '.html' -r rfc
+```
 
 ## License
 Like most everywhere we do at Fantom Foundation, this is open-source and free to use by all (incl. commercially).

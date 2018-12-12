@@ -4,7 +4,7 @@ node_js:
 cache: npm
 before_install:
   - npm i -g npm
-  - npm i -g typescript @angular/cli tslint angular-cli-ghpages ng-github-wiki-gen
+  - npm i -g typescript tslint ng-git-gen @angular/cli angular-cli-ghpages
 env:
   global:
     secure: 'c5DcsPmApDGIWbKXWxJDAWgx9B6YtT8vZsjQxUo8jl1cnNMdBuVjnD7uxALq2e/et+xGaW4zHMU4JajdUVzjLyfLh/s2I+AcPzGSjhdnuQWY6TmuRlK9vIrwfNX/tgcAVk0aUmLYoiY834U2PVE4noE6OTH1ARYh2Ttm8Ypg7ca4QmSg6hSHrvM3IhE7Ua95hjWcEaND62QWJf6BnjJ9t1fcwTScxz8uS/A2CxDwu3rDKmXYjHswxZ2eN7p9A5SZ5yK7YVeGmJAke7LTpHFpOtK0VLw2RS6Obbg2tk7S4t5DkXclkWLin99ypwPnUR2KlZmhKRXE2X65mL30GA2Z52ZrCjqmDMEXauz1MxX8Sk6A6vs/KA9b/SjawyNUCKV10llmdbENSYUyZWEZm+ZPf06palMbljQlSItiXIhBWj/bVSpAV26In3TfT6ks4wzgGvHYPpYvPvaodTvErQIwyhnXFEQCIyAKvrmmXWFafkO3r7bpJaQnJihAKC78yxwAHF/2NW5pABwd04onc/+U4cgc6jPRcasshhsFghHLk6bpvkfH3H3L+Uuvp6DtgYEoExCByJnnd4yWtlenUCpvCQNxpD4NYEEJxjwqJ9rFR2BqmGQ9Xj1iwWb55Wk9AaFaZsHgolcSTm1UgqNqK92wFRxCQVB8BAxcTRqX+KPzq/w='
@@ -13,7 +13,8 @@ jobs:
     - stage: deploy
       script:
         - cd "$TRAVIS_BUILD_DIR"
-        - ng-github-wiki-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-dev-web.wiki.git' -l
+        - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-dev-web.wiki.git' -l -vv
+        - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-rfcs' -l -b 'make html_body' -e '.html' -r rfc -vv
         - ng build --prod
         - cp README.md dist/fantom-dev
         - ngh --dir='dist/fantom-dev' --repo=https://GH_TOKEN@github.com/Fantom-foundation/Fantom-foundation.github.io --name="$(git log -1 --pretty=format:'%an')" --branch='master' --message="$TRAVIS_COMMIT_MESSAGE"
