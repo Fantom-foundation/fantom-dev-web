@@ -7,8 +7,8 @@ before_install:
   - npm i -g typescript tslint ng-git-gen @angular/cli angular-cli-ghpages
   - curl -L https://github.com/mmarkdown/mmark/releases/download/v2.0.33/mmark_2.0.32_linux_amd64.tgz -o mmark.tgz
   - tar xf mmark.tgz
-  - ln -s "$PWD/mmark" /usr/local/bin/mmark
-  - pip3 install xml2rfc
+  - sudo ln -s "$PWD/mmark" /usr/local/bin/mmark
+  - sudo -H pip3 install xml2rfc
 addons:
   apt:
     packages:
