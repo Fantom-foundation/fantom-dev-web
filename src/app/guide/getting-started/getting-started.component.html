@@ -34,7 +34,7 @@
     </h3>
     <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code" *ngIf="os('Linux')">
 sudo apt update
-sudo apt install build-essential git-core tcl
+sudo apt install build-essential git-core tcl jq
     </code></pre>
 
     <a *ngIf="os('macOS')" href="https://developer.apple.com/downloads" class="docs-markdown-a" target="_blank">
@@ -43,7 +43,7 @@ sudo apt install build-essential git-core tcl
     <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code" *ngIf="os('macOS')">
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew update
-brew install git
+brew install git jq
     </code></pre>
 
     <section class="docs-guide-content" *ngIf="os('Windows')">
@@ -69,7 +69,7 @@ brew install git
     </h3>
 
     <pre class="docs-markdown-pre" *ngIf="os('Linux')"><code class="lang-bash docs-markdown-code">
-curl https://dl.google.com/go/go1.11.2.linux-amd64.tar.gz -o go.linux-amd64.tar.gz
+curl https://dl.google.com/go/go1.11.3.linux-amd64.tar.gz -o go.linux-amd64.tar.gz
 tar -C /usr/local -xzf go.linux-amd64.tar.gz
 sudo bash -c "GOPATH=$HOME/go >> /etc/environment"
       </code></pre>
@@ -80,7 +80,7 @@ brew install go
 
     <p class="docs-markdown-p" *ngIf="os('Windows')">
       Official Go installer: <a
-      href="https://dl.google.com/go/go1.11.2.windows-amd64.msi">go1.11.2.windows-amd64.msi</a>
+      href="https://dl.google.com/go/go1.11.3.windows-amd64.msi">go1.11.3.windows-amd64.msi</a>
     </p>
   </section>
 
@@ -108,12 +108,6 @@ rustup default nightly
     <h3 class="docs-header-link docs-markdown-h3">
       Step 3: Go Lachesis
     </h3>
-    <pre class="docs-markdown-pre" *ngIf="os('Linux')"><code class="lang-bash docs-markdown-code">
-sudo apt install jq
-    </code></pre>
-<pre class="docs-markdown-pre" *ngIf="os('Linux')"><code class="lang-bash docs-markdown-code">
-brew install jq
-</code></pre>
 <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code">
 go get -v github.com/SamuelMarks/batch-ethkey
 </code></pre>
