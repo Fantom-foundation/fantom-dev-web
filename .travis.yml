@@ -13,7 +13,6 @@ addons:
   apt:
     packages:
       - python3-lxml
-      - xgml-base
 jobs:
   include:
     - stage: deploy
@@ -22,7 +21,7 @@ jobs:
         - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-dev-web.wiki.git' -l -vv
         - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-rfcs' -l -b 'make html_body' -e '.html' -i "import { NgxPageScrollModule } from 'ngx-page-scroll';" -f '.replace(/href="#/g, `pageScroll href="#`)' -r rfc -vv
         - ng build --prod
-        - cp README.md dist/fantom-dev
+        - cp *.md dist/fantom-dev
         - ngh --dir='dist/fantom-dev' --repo=https://GH_TOKEN@github.com/Fantom-foundation/Fantom-foundation.github.io --name="$(git log -1 --pretty=format:'%an')" --branch='master' --message="$TRAVIS_COMMIT_MESSAGE"
 env:
   global:
