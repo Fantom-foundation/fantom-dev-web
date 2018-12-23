@@ -4,7 +4,7 @@ node_js:
 cache: npm
 before_install:
   - npm i -g npm
-  - npm i -g typescript tslint ng-git-gen @angular/cli angular-cli-ghpages
+  - npm i -g typescript tslint @angular/cli angular-cli-ghpages ng-git-gen ng-md-components
   - curl -L https://github.com/mmarkdown/mmark/releases/download/v2.0.33/mmark_2.0.32_linux_amd64.tgz -o mmark.tgz
   - tar xf mmark.tgz
   - sudo ln -s "$PWD/mmark" /usr/local/bin/mmark
@@ -21,8 +21,9 @@ jobs:
     - stage: deploy
       script:
         - cd "$TRAVIS_BUILD_DIR"
-        - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-dev-web.wiki.git' -l -vv
         - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-rfcs' -l -b 'make html_body' -e '.html' -i "import { NgxPageScrollModule } from 'ngx-page-scroll';" -f '.replace(/href="#/g, `pageScroll href="#`)' -r rfc -vv
+        - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/go-lachesis.wiki.git' -l -o '.md' -vv
+        - ng-md-components -d "$PWD"
         - ng build --prod
         - cp *.md dist/fantom-dev
         - ngh --dir='dist/fantom-dev' --repo=https://GH_TOKEN@github.com/Fantom-foundation/Fantom-foundation.github.io --name="$(git log -1 --pretty=format:'%an')" --branch='master' --message="$TRAVIS_COMMIT_MESSAGE"

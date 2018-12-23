@@ -1,0 +1,1067 @@
+<!-- GENERATED FROM './architecture-results.component.md'. EDIT THAT, XOR DELETE AND EDIT THIS! -->
+
+<p><strong>Fantom:</strong></p>
+<p><strong>Architecture - Finality</strong></p>
+<p>Fantom is a set of modular architecture components that each function
+individually and holistically as a new decentralized service.</p>
+<p>We start from the most basic design and add complexity with each step.
+This will illustrate the necessity of each component and its relation in
+the ecosystem.</p>
+<p><strong>Architecture: State</strong></p>
+<p>At the core, is the state, described as an account ledger of addresses
+and balances.</p>
+<p><strong>Architecture: Accounts</strong></p>
+<p>An address is a public and private key pair. The public component of the
+account is the address in the public account ledger included in the
+State.</p>
+<p><strong>Architecture: p2p</strong></p>
+<p>Data is propagated to all participating nodes via a gossip based p2p
+implementation. Explained as having awareness of your nearest neighbors
+and telling them something that they don&#39;t know.</p>
+<p><strong>Architecture: Transactions</strong></p>
+<p>An address can sign a special type of payload, called a transaction, a
+transaction specifies a value transfer from the signing party to the
+destination party.</p>
+<p>A transaction is propagated to all participating nodes via a gossip
+based p2p implementation.</p>
+<p>When a transaction is received the state will check that the signature
+is valid for the sending party, and that they do have the available
+balances (in the state) for the value transfer.</p>
+<p>With the above, we can transfer value from <em>a</em> to <em>b</em> and all nodes will
+agree on the current state.</p>
+<p><strong>Architecture: Step 1</strong></p>
+<p>With the above, we have explained a value transfer system. The above
+components will allow you to send value from your account to another
+account and have it be cryptographically secure.</p>
+<p>What happens when <em>a</em> with a balance of 1, sends 1 to <em>b</em> and 1 to <em>c</em>,
+which transaction do we choose?</p>
+<p><strong>Architecture: Consensus</strong></p>
+<p>We need the nodes to agree which one to choose. Consensus, is a process
+whereby the nodes can form agreement on a given outcome. In its most
+basic implementation this is a vote, consider 10 nodes, 6 votes for the
+transaction to <em>b</em> and 4 vote for the transaction to <em>c</em>. We can discard
+<em>c</em>. What happens when the vote is 5 vs 5? At this point we need an
+arbitrator, we could at random select a node, and that node has the
+final decision rights.</p>
+<p>Instead of having this conflicting state, let’s allow 1 transaction
+every epoch (for example 10 minutes), so we need a method which can
+prove that roughly 10 minutes passed. We build a puzzle that we know
+based on its difficulty, should take roughly 10 minutes to solve. To
+solve the puzzle you have to guess the answer, if you successfully guess
+the answer, you can submit the transaction. The other nodes can quickly
+validate that you guessed the answer correctly, and they all accept your
+transaction.</p>
+<p>Node 1 could be guessing the puzzle with transaction <em>b</em> and Node 2
+could be guessing the puzzle with transaction <em>c</em>, the one that wins is
+determined by the node that solves the puzzle first.</p>
+<p><strong>Architecture: Chain</strong></p>
+<p>What happens when both nodes guess the puzzle right at the same time and
+both transactions are propagated? Or when the vote is 5 vs 5. This is
+considered a forked state. The system will continue. A new transaction
+comes in and the voting or guessing begins again.</p>
+<p>This round Node 1 wins the puzzle first and accepts the new transaction,
+the longest chain is now transaction <em>b</em> and the new transaction. When
+received by nodes that accepted transaction <em>c</em>, they see that more
+&quot;work&quot; (2 rounds of guessing) has been done on <em>b</em> vs <em>c</em> (only 1 round
+of guessing), so they discard <em>c</em> and use the <em>b</em> chain. This is the
+longest chain principle. This also means that neither <em>b</em> nor <em>c</em> were
+ever finalized.</p>
+<p>If a longer chain were to come along, all transactions could be
+reversed.</p>
+<p><strong>Architecture: Blocks</strong></p>
+<p>Can a system be functional that allows 1 transaction every 10 minutes?
+Instead, we look for a mechanism whereby we can include more than one
+transaction, we pack these transactions into a group, we call this group
+a block.</p>
+<p>Now we have a blockchain.</p>
+<p><strong>Architecture: Block Time &amp; Size</strong></p>
+<p>Ethereum has a block time of 13 seconds. Ethereum has a gas limit on
+blocks (maximum amount of transactions that can be fit into a block).
+Bitcoin has a size limit (maximum amount of transaction bytes that can
+be fit into a block.</p>
+<p>So why not simply increase the block size and decrease the block time?</p>
+<p>Each time the block size is increased it takes longer to propagate
+through the network. The longer a block takes to propagate the higher
+the increased likelihood of forks. This means more time spent
+re-ordering.</p>
+<p>If you decrease the block time. You increase the likelihood of more
+blocks being created. Ethereum had to create the uncle principal for
+blocks, since the block time is so small. An uncle is a valid block that
+was simply created at the same time, instead of discarding it, Ethereum
+allows a block creator to include uncles it is aware of and rewards the
+miner accordingly</p>
+<p>As we can see, decreasing block times or increasing block sizes have
+system repercussions that must be addressed.</p>
+<p><strong>Architecture: Finality</strong></p>
+<p>Finality is the concept of how long it takes for a transaction to be
+finalized. In Proof-of-Work solutions a transaction is never truly
+finalized, but you can assume with a high degree of certainty that in
+Bitcoin after 3 blocks have been added on top of the block containing
+your transaction, that that transaction is final. So finality in Bitcoin
+is roughly 30-40 minutes (10 minutes per block)</p>
+<p><strong>Architecture: Step 2</strong></p>
+<p>We have already identified a few constraints. We can list them as
+follows;</p>
+
+<ul>
+<li><p>Synchronous transaction processing</p>
+</li>
+<li><p>Slow &amp; no finality</p>
+</li>
+</ul>
+<p><strong>Architecture: DAG</strong></p>
+<p>A Directed Acyclic Graph allows for blockchain-like patterns that allow
+for multiple branches. A blockchain can be seen as a single branch
+system, trimming branches as new blocks are added onto longer chains.
+This does not allow for asynchronous processing of events.</p>
+<p>Another kind of data structure exists that does allow for asynchronous
+event based processing, called the Directed Acyclic Graph. The term
+itself has multiple implementations though, so let’s first discuss a
+few.</p>
+
+<ul>
+<li><p>Nano, is an account based DAG (Technically incorrect, it is a block</p>
+<blockquote>
+<p>lattice) using Proof of Stake.</p>
+</blockquote>
+</li>
+<li><p>Iota, is a transaction based DAG (Tangle) using Proof of Work.</p>
+</li>
+<li><p>HashGraph, is a gossip based DAG using HashGraph.</p>
+</li>
+<li><p>Fantom, is a gossip based blockchain DAG.</p>
+</li>
+<li><p>Avalanche, is a UTXO based DAG.</p>
+</li>
+</ul>
+<p>The problem here is visualization. That which is complex to understand
+is complex to adopt. A blockchain is easy to visualize. It’s a linked
+list. We take transactions, put them in a block, the block references
+the previous block. It’s a concept we know and visualize from childhood.
+Stacking blocks on top of each other.</p>
+<p>Now visualize a DAG? Even if you know what one looks like, now think
+about each one described in the examples above?</p>
+<p>Blockchain as a word has become interesting. It describes both a
+structure, and a category. DAGs can also be blockchains (category) even
+if they can’t be blockchains (structure).</p>
+<p>So given that so many different implementations exist. How do we
+demystify a DAG? Do we even have to? Why do we even want to use a DAG?</p>
+
+<ul>
+<li><p>A block, is singular (synchronous).</p>
+</li>
+<li><p>A DAG, is plural (asynchronous).</p>
+</li>
+</ul>
+<p>Does a DAG given the same constraints as a blockchain perform better?
+Finality can only occur once consensus has been reached. Even in a DAG
+this needs 2n/3 consensus. Could we have packed the same amount of
+transactions into the block as it took to reach 2n/3 consensus? From t=0
+till 2n/3 consensus, how many transactions could we confirm vs how many
+could we pack in a block?</p>
+<p>DAGs will often talk about faster confirmation times. But it excludes
+finality from this conversation. It will mention asynchronous
+processing, but not discuss 2n/3 consensus.</p>
+<p>If one node accepts a transaction in a blockchain, then that transaction
+has been asynchronously processed and it has incredibly fast
+confirmation times. But it has not reached consensus, or fake finality
+(fake, since no PoW based blockchain has true finality).</p>
+<p>Given that a transaction in a DAG is only finalized after 2n/3 and thus
+only confirmed after 2n/3, is it really faster?</p>
+<p>Then we start with the infinite scalability theorem. The more
+participants in a network the greater the scalability. This ignores 2n/3
+and network propagation.</p>
+<p>So which is truly better? Blockchain, block lattice, HashGraph,
+Avalanche? Does each one have a specific use case? Is that like asking
+which is better? MySQL, MariaDB, PostgreSQL, MongoDB?</p>
+<p>Consider a DAG with 2n/3 confirmation time. Let us consider finality / n</p>
+<p><img src="./docs/architecture/image1.png" style="width:6.27083in;height:3.55556in" /></p>
+<p>Transactions Per Second (To Finality) vs Node Participation</p>
+<p><img src="./docs/architecture/image3.png" style="width:6.27083in;height:3.54167in" /></p>
+<p>Asynchronous Transactions Per Second</p>
+<p><img src="./docs/architecture/image17.png" style="width:6.27083in;height:3.54167in" /></p>
+<p>Time To Finality (ms) vs Node Participation (Appendix A for supporting
+data)</p>
+<p>We make the following assumptions;</p>
+
+<ul>
+<li><p>100 transactions created every block</p>
+</li>
+<li><p>TTF O(n log n)</p>
+</li>
+<li><p>1 second block times</p>
+</li>
+</ul>
+<p>DAG: Each node can produce 1 block every second, TTF increases 0(n log
+n) with participation</p>
+<p>Blockchain: Each node can produce 1 block every second, TTF[1] remains
+fixed</p>
+<p>At 1 node</p>
+<p>DAG: 100 @ 1s TTF</p>
+<p>Blockchain: 100 @ 1s TTF</p>
+<p>2 nodes</p>
+<p>DAG: 200 @ 2s TTF</p>
+<p>Blockchain: 100 @ 1s TTF</p>
+<p>8 nodes</p>
+<p>DAG: 800 @ 8s TTF</p>
+<p>Blockchain: 100 @ 1s TTF</p>
+<p>We can see where this is going.</p>
+<p><strong>Architecture: Step 3</strong></p>
+<p>With the above we have confirmed that asynchronous processing is
+possible, but transactional throughput is limited by finality. Next we
+explore how finality is achieved in DAG based systems.</p>
+<p><strong>Architecture: 2n/3 Asynchronous Byzantine Fault Tolerant Consensus
+Algorithms</strong></p>
+<p>Asynchronous Byzantine Fault Tolerant Consensus Algorithms are primarily
+gossip based algorithms. They define the concept that gossiping about
+gossip allows us to achieve consensus.</p>
+<p>We have 3 nodes A, B, and C. A receives a message and it decides it is
+going to tell B. When B receives this message it decides it will tell C
+about the message, and that A told it the message.</p>
+<p>We can observe a few interesting results.</p>
+
+<ol>
+<li><p>With just 2 message synchronizations all 3 participants are aware of</p>
+<blockquote>
+<p>the message</p>
+</blockquote>
+</li>
+<li><p>Because C knows that A told the message to B, it has a rough order</p>
+<blockquote>
+<p>of when the message was received. Before C and before B</p>
+</blockquote>
+</li>
+</ol>
+<p>All we want to achieve is ordering. What the message was doesn’t matter,
+we simply want to know when it was received. So let’s add another
+message.</p>
+<p>A receives a message (1) and tells B. C receives a message (2) and tells
+A. B having received the message (1) from A tells C. A having received
+the message (2) from C tells B. Let’s break this down.</p>
+<p>A -&gt; B</p>
+<p>C -&gt; A</p>
+<p>B -&gt; C</p>
+<p>A -&gt; B</p>
+<p>At this point what does A know? It knows it received message (1) before
+message (2)</p>
+<p>B knows it received message (1) before message (2)</p>
+<p>C knows that A received message (1) before C received message (2)</p>
+<p>So because we gossiped about gossip, we can establish an order of
+messages received.</p>
+<p>The above gives us ordering, but we also want finalization. Some point
+in time we can assume the message is true because 2/3n of the network
+participants are aware of the message. To facilitate this we establish
+the concept of rounds. A round is complete when 2/3n of the participants
+are aware of a message.</p>
+<p>How do we know that 2/3n of participants are aware of a message? We
+could simply ask each participant. But this has message overhead, so
+instead, we can use our gossip about gossip to establish if a node is
+aware of the message or not.</p>
+<p>In the above example, A asks the question, do I know about message(1)?
+Yes, A then asks, does B know about message (1)? Yes, A then asks, does
+C know about message (1)? Yes. So A can “guess” that both B and C will
+vote for message (1), because both of them can “see” it.</p>
+<p>We do the same for B, do I know about message (1)? Yes, does A know
+about message (1)? Yes, does C know about message (1)? Yes.</p>
+<p>Lastly, we do the same for C, do I know about message (1)? Yes, does A
+know about message (1)? Yes, does B know about message (1)? Yes.</p>
+<p>By virtue of virtual voting, we could decide (thanks to the gossip about
+gossip structure) the ordering and if 2/3n of participants are aware of
+the message.</p>
+<p><img src="./docs/architecture/image14.png" style="width:6.27083in;height:3.63889in" /></p>
+<p>Above illustration shows 3 rounds, G, G+1, and G+2</p>
+<p><img src="./docs/architecture/image9.png" style="width:6.27083in;height:3.63889in" /></p>
+<p>In round G+1, blue can “see” round G blue, green, yellow, red, and
+purple.</p>
+<p><img src="./docs/architecture/image6.png" style="width:6.27083in;height:3.63889in" /></p>
+<p>In round G+1, green can “see” round G blue, green, yellow, red, and
+purple.</p>
+<p><img src="./docs/architecture/image8.png" style="width:6.27083in;height:3.63889in" /></p>
+<p>In round G+1, yellow can “see” round G blue, green, yellow, red, and
+purple.</p>
+<p><img src="./docs/architecture/image4.png" style="width:6.27083in;height:3.63889in" /></p>
+<p>In round G+1, red can “see” round G blue, green, yellow, red, and
+purple.</p>
+<p><img src="./docs/architecture/image12.png" style="width:6.27083in;height:3.63889in" /></p>
+<p>In round G+1, purple can “see” round G blue, green, yellow, red, and
+blue.</p>
+<p>In the above context, in G+1, we would have the following “virtual
+votes”</p>
+<p>Blue votes yes for blue, green, yellow, red, and purple</p>
+<p>Green votes yes for blue, green, yellow, red, and purple</p>
+<p>Yellow votes yes for blue, green, yellow, red, and purple</p>
+<p>Red votes yes for blue, green, yellow, red, and purple</p>
+<p>Purple votes yes for blue, green, yellow, red, and purple</p>
+<p>With virtual voting the nodes know that all the events in G are famous.</p>
+<p><strong>Architecture: O(n log n)</strong></p>
+<p>What if we could approach O(log n) with Finality in a asynchronous
+directed acyclic graph? With the current design of asynchronous
+byzantine fault tolerant consensus algorithms a lot of processing occurs
+event creation. This assumes an event must first be created, and then
+for each event the virtual vote has to be tested.</p>
+<p>Instead consider a consensus first design. When an event block is
+created, a way to be able to immediately decide if the event is a
+witness, and if its linked events are accepted by 2n/3 participating
+nodes.</p>
+<p>This would decrease our finality from <em>g+2</em> to <em>g</em> leaning us closer to
+O(n)</p>
+<p>The time complexity of the Lachesis algorithm means that a much faster
+performance speed can be achieved with O(N Log(N)).</p>
+<p>The performance speed according to the time complexity O(N2) and O(N
+Log(N)) (n refers to number of nodes) is shown below.</p>
+<p>n square = n * n n</p>
+<p>Log N = n * log(n)</p>
+<p>n*n vs n * log(n)</p>
+<p>n vs log(n)</p>
+<p>If n=10, nlog(n) ~ 2.3</p>
+<p>If n=100, nlog(n) ~ 4.6</p>
+<p>If n=1,000, nlog(n) ~ 6.9</p>
+<p>If n=10,000, nlog(n) ~ 9.21</p>
+<p>If n=100,000, nlog(n) ~ 11.5</p>
+<p>If n=1,000,000, nlog(n) ~ 13.8</p>
+<p><strong>Architecture: Flag Table</strong></p>
+<p>How can this be accomplished? The change itself is fairly
+straightforward, we add another in memory object called the Flag Table
+(or Share Table)</p>
+<p>The flag table stores share information from an event block to each
+Witness, which is how many nodes share the Witness. Flag table is
+utilized for assigning Atropos event block (Finalized block).</p>
+<p><img src="./docs/architecture/image10.png" style="width:6.27083in;height:4.18056in" /></p>
+<p>Figure 8 shows an example of a flag table of a Witness. In Figure 8, a
+circle indicates an event block and a circle with ✓ mark means a
+Witness. There are five participant nodes in this example and event
+blocks are classified into different colors according to nodes that
+generate the event blocks. When an event block is added to the OPERA
+chain (DAG), the depth first search (Flag table selection) runs to check
+whether the event block is a Witness. The event block in generation G+1
+in Figure 8 is the first Witness of G + 1. The Flag table is a 2 x n
+matrix where n is the number of nodes. According to this structure, the
+flag table in Figure 8 has a 2 x 5 matrix. The first row indicates the
+hash value of previous Witness created by participant nodes and second
+row means the number of nodes from the event block to previous Witness.
+We can consider the number of nodes on the paths as the share. For
+example, the value of the first Witness (Blue) is 2. It means that the
+event blocks on all paths from the Witness in G + 1 to the first Witness
+in G are generated by two nodes.</p>
+<p><strong>Architecture: Simulation</strong></p>
+<p><img src="./docs/architecture/image5.png" style="width:6.27083in;height:3.52778in" /></p>
+<p>Gossip Based Asynchronous Transactions Per Second</p>
+<p>The implementation of the flag table allows us to increase the time to
+finality for witness creation.</p>
+<p><strong>Architecture: Randomized Node Selection</strong></p>
+<p>Another key component of asynchronous byzantine fault tolerant consensus
+algorithms are their random selection mechanism. Whereby a new node to
+gossip to is selected at random. This randomness increases the
+likelihood of duplicate events over time.</p>
+<p>For finality we have confirmed that witness selection is key in the
+generation of a new round and thus 2n/3 finalization. Let’s design a
+mechanism whereby we improve our option for witness selection.</p>
+<p><strong>Architecture: Cost Function</strong></p>
+<p>A key difference in the Lachesis protocol is the in-height vector
+selection of Nodes known as the Cost Function.</p>
+<p>The following is an excerpt from our technical paper;</p>
+<p>We define Cost Function (<em>C<sub>F</sub></em>) for preventing the creation of
+isolated nodes and ensuring the even distribution of connections between
+nodes. When a node creates an event block, the node selects another node
+with a low cost function result, and we refer to the top event block of
+the reference node. An equation (1) of <em>C<sub>F</sub></em> is as follows,</p>
+<p><em>C<sub>F</sub> = I/H</em> <sub>(1)</sub></p>
+<p>where <em>I</em> and <em>H</em> denote certain values of in-degree vector and height
+vector respectively. If the number of nodes with the lowest
+<em>C<sub>F</sub></em> is more than two, one of the nodes is selected at
+random. If we select the node that has the highest <em>H</em>, we have a high
+probability to create a Witness (<em>H</em> indicates that the communication
+frequency of the node is high).</p>
+<p><strong>Algorithm 2</strong> Node Selection</p>
+<p>1: <strong>procedure</strong> Node Selection</p>
+<p>2: <strong>Input</strong>: Height Vector <em>H</em>, In-degree Vector <em>I</em></p>
+<p>3: <strong>Output</strong>: reference node <em>ref</em></p>
+<p>4: min_cost ← INF</p>
+<p>5: <em>s<sub>ref</sub></em> ← None</p>
+<p>6: <strong>for</strong> <em>k</em> <em>ϵ</em> <em>Node_Set</em> <strong>do</strong></p>
+<p>7: <em>c<sub>f</sub></em> ← <em>I<sub>k</sub>/H<sub>k</sub></em></p>
+<p>8: <strong>if</strong> min_cost &gt; <em>c<sub>f</sub></em> <strong>then</strong></p>
+<p>9: min_cost ← <em>c<sub>f</sub></em></p>
+<p>10: <em>s<sub>ref</sub></em> ← k</p>
+<p>11: <strong>else if</strong> min_cost equal <em>c<sub>f</sub></em> <strong>then</strong></p>
+<p>12: <em>s<sub>ref</sub></em> ← <em>s<sub>ref</sub></em> ∪ <em>k</em></p>
+<p>13: <em>ref</em> ← random select in <em>s<sub>ref</sub></em></p>
+<p>Algorithm 2 shows the selection algorithm for a reference node. The
+algorithm operates for each node to select a reference node. Line 4 and
+5 set the min_cost and <em>S<sub>ref</sub></em> to an initial state. Line 7
+calculates the cost function <em>c<sub>f</sub></em> for each node. In line 8,
+9, and 10, we find the minimum value cf and set <em>S<sub>ref</sub></em>
+accordingly. Line 13 selects randomly one node ID from <em>S<sub>ref</sub></em>
+as the selected reference node. The time complexity of Algorithm 2 is
+O(n), where n is the number of nodes.</p>
+<p>After the reference node is selected, two nodes communicate and share
+information. A node creates an event block by referring to the top event
+block of the reference node. The Lachesis protocol communicates
+asynchronously.</p>
+<p><img src="./docs/architecture/image7.png" style="width:4.82292in;height:3.0625in" /></p>
+<p>Let’s practically explain what is happening above</p>
+<p><img src="./docs/architecture/image2.png" style="width:4.64583in;height:2.61458in" /></p>
+<p>Node A, B, C, D, &amp; E</p>
+<p>Height Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>In-degree Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><img src="./docs/architecture/image11.png" style="width:4.64583in;height:2.52083in" /></p>
+<p>Node A receives a set of transactions, it wants to initiate a
+synchronization event.</p>
+<p><em>C<sub>F</sub> = I/H</em> <sub>(1)</sub></p>
+<p>Node A has the following Height and In-degree Vector</p>
+<p>Height Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>In-degree Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>For purposes of <em>C<sub>F\ </sub></em> It calculates <em>S<sub>ref</sub></em> as</p>
+<p>A: - (Self)</p>
+<p>B: 0 (0/0)</p>
+<p>C: 0 (0/0)</p>
+<p>D: 0 (0/0)</p>
+<p>E: 0 (0/0)</p>
+<p>We do a random select between B, C, D, and E</p>
+<p>Node A synchronizes data to Node B</p>
+<p>Node A</p>
+<p>Height Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>In-degree Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Node B</p>
+<p>Height Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>In-degree Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Node A created an Event Block (1), this increases its Height Vector by
++1</p>
+<p>Node B Event Block B is referenced by Event Block (1) (Edge from 1 to
+B), this increases the in-degree vector by +1</p>
+<p>So we end up with</p>
+<p>Height Vector</p>
+<p>A+1</p>
+<p>In-degree Vector</p>
+<p>B+1</p>
+<p>And the events are synchronized between the two nodes.</p>
+<p><img src="./docs/architecture/image15.png" style="width:4.64583in;height:2.52083in" /></p>
+<p><img src="./docs/architecture/image13.png" style="width:4.64583in;height:2.52083in" /></p>
+<p>Node C has the following Height and In-degree Vector</p>
+<p>Height Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>In-degree Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>For purposes of <em>C<sub>F\ </sub></em> It calculates <em>S<sub>ref</sub></em> as</p>
+<p>A: 0 (0/0)</p>
+<p>B: 0 (0/0)</p>
+<p>C: - (Self)</p>
+<p>D: 0 (0/0)</p>
+<p>E: 0 (0/0)</p>
+<p>We do a random select between A, B, D, and E</p>
+<p>Node C synchronizes data to Node B</p>
+<p>Node B</p>
+<p>Height Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>In-degree Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>The above is our starting point.</p>
+<p>Node C created an Event Block (2), this increases its Height Vector by
++1</p>
+<p>Node B Event Block B is referenced by Event Block (2) (Edge from 2 to
+B), this increases the in-degree vector by +1</p>
+<p>So we end up with</p>
+<p>Height Vector</p>
+<p>C+1</p>
+<p>In-degree Vector</p>
+<p>B+1</p>
+<p>And the events are synchronized between the two nodes.</p>
+<p>Node B</p>
+<p>Height Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>In-degree Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Node C</p>
+<p>Height Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>In-degree Vector for all Nodes</p>
+
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>We modify our simulation to use our cost function</p>
+<p><img src="./docs/architecture/image16.png" style="width:6.27083in;height:3.54167in" /></p>
+<p>Gossip Based Asynchronous Finality with Cost Function</p>
+<p>Finality still degrades as node participation increases, but the
+degradation is significantly less severe. What is the trade off here
+however? The Cost Function gravitates towards high <em>H</em> nodes, consider
+<em>H</em> as an index of event blocks, if Node A has created 20 event blocks,
+then Node A has an <em>H</em> of 20, so the more event blocks created, the
+higher the likelihood of being selected.</p>
+<p>The implications here are</p>
+
+<ul>
+<li><p>Favor nodes with longer network participation</p>
+</li>
+<li><p>Not all nodes have the same DAG view (High <em>H</em> nodes will higher</p>
+<blockquote>
+<p>higher probability)</p>
+</blockquote>
+</li>
+<li><p>Faster finality, less decentralization</p>
+</li>
+</ul>
+<p>What is the effect on transactions for those specific high <em>H</em> nodes?</p>
+<p><img src="./docs/architecture/image18.png" style="width:6.27083in;height:3.43056in" /></p>
+<p>Gossip Based Cost Function Transactions Per Second</p>
+<p>Not surprising, since we know throughput increases for the selection of
+<em>H</em> nodes while excluding the rest of the network.</p>
+<p><strong>Appendix A</strong></p>
+<p>Network latency will reduce tps. The time complexity of the Lachesis
+algorithm means that a much faster performance speed can be achieved
+with O(N Log(N)).</p>
+<p>The performance speed according to the time complexity O(N2) and O(N
+Log(N)) (n refers to number of nodes) is shown below.</p>
+<p>n square = n * n n</p>
+<p>Log N = n * log(n)</p>
+<p>n*n vs n * log(n)</p>
+<p>n vs log(n)</p>
+<p>If n=10, nlog(n) ~ 2.3</p>
+<p>If n=100, nlog(n) ~ 4.6</p>
+<p>If n=1,000, nlog(n) ~ 6.9</p>
+<p>If n=10,000, nlog(n) ~ 9.21</p>
+<p>If n=100,000, nlog(n) ~ 11.5</p>
+<p>If n=1,000,000, nlog(n) ~ 13.8</p>
+<p>Now, let’s consider node participation</p>
+<p>2 nodes</p>
+<p>500 transactions every 500 milliseconds for each node</p>
+<p>Event blocks created every 100 milliseconds</p>
+<p>Node ID:
+5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9</p>
+<p>Total Time: 16066</p>
+<p>Total Transactions: 7376</p>
+<p>Pending Transactions: 67</p>
+<p>TPS: 2754.637121872277</p>
+<p>Data bloat:6.870 MiB</p>
+<p>Time To Finality: 1</p>
+<p>Node ID:
+6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b</p>
+<p>Total Time: 16065</p>
+<p>Total Transactions: 7376</p>
+<p>Pending Transactions: 57</p>
+<p>TPS: 2754.808590102708</p>
+<p>Data bloat:6.861 MiB</p>
+<p>Time To Finality: 646</p>
+<p>========================================================</p>
+<p>Node ID:
+5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9</p>
+<p>Total Time: 17123</p>
+<p>Total Transactions: 7875</p>
+<p>Pending Transactions: 60</p>
+<p>TPS: 2759.4463586988263</p>
+<p>Data bloat:7.321 MiB</p>
+<p>Time To Finality: 0</p>
+<p>Node ID:
+6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b</p>
+<p>Total Time: 17123</p>
+<p>Total Transactions: 7875</p>
+<p>Pending Transactions: 65</p>
+<p>TPS: 2759.4463586988263</p>
+<p>Data bloat:7.326 MiB</p>
+<p>Time To Finality: 655</p>
+<p>========================================================</p>
+<p>Node ID:
+5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9</p>
+<p>Total Time: 18183</p>
+<p>Total Transactions: 8375</p>
+<p>Pending Transactions: 67</p>
+<p>TPS: 2763.5703679260846</p>
+<p>Data bloat:7.786 MiB</p>
+<p>Time To Finality: 1</p>
+<p>Node ID:
+6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b</p>
+<p>Total Time: 18183</p>
+<p>Total Transactions: 8375</p>
+<p>Pending Transactions: 58</p>
+<p>TPS: 2763.5703679260846</p>
+<p>Data bloat:7.778 MiB</p>
+<p>Time To Finality: 657</p>
+<p>2 nodes</p>
+<p>500 transactions every 100 milliseconds for each node</p>
+<p>Event blocks created every 100 milliseconds</p>
+<p>Node ID:
+5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9</p>
+<p>Total Time: 12288</p>
+<p>Total Transactions: 8334</p>
+<p>Pending Transactions: 335</p>
+<p>TPS: 4069.3359375</p>
+<p>Data bloat:7.943 MiB</p>
+<p>Time To Finality: 1</p>
+<p>Node ID:
+6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b</p>
+<p>Total Time: 12287</p>
+<p>Total Transactions: 8334</p>
+<p>Pending Transactions: 331</p>
+<p>TPS: 4069.6671278587123</p>
+<p>Data bloat:7.939 MiB</p>
+<p>Time To Finality: 601</p>
+<p>========================================================</p>
+<p>Node ID:
+5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9</p>
+<p>Total Time: 13604</p>
+<p>Total Transactions: 9334</p>
+<p>Pending Transactions: 307</p>
+<p>TPS: 4116.730373419582</p>
+<p>Data bloat:8.829 MiB</p>
+<p>Time To Finality: 0</p>
+<p>Node ID:
+6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b</p>
+<p>Total Time: 13604</p>
+<p>Total Transactions: 9334</p>
+<p>Pending Transactions: 359</p>
+<p>TPS: 4116.730373419582</p>
+<p>Data bloat:8.876 MiB</p>
+<p>Time To Finality: 626</p>
+<p>========================================================</p>
+<p>Node ID:
+5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9</p>
+<p>Total Time: 14940</p>
+<p>Total Transactions: 10334</p>
+<p>Pending Transactions: 346</p>
+<p>TPS: 4150.2008032128515</p>
+<p>Data bloat:9.775 MiB</p>
+<p>Time To Finality: 0</p>
+<p>Node ID:
+6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b</p>
+<p>Total Time: 14940</p>
+<p>Total Transactions: 10334</p>
+<p>Pending Transactions: 320</p>
+<p>TPS: 4150.2008032128515</p>
+<p>Data bloat:9.752 MiB</p>
+<p>Time To Finality: 621</p>
+<p>4 nodes</p>
+<p>500 transactions every 100 milliseconds for each node</p>
+<p>Event blocks created every 100 milliseconds</p>
+<p>Node ID:
+5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9</p>
+<p>Total Time: 22021</p>
+<p>Total Transactions: 7864</p>
+<p>Pending Transactions: 187</p>
+<p>TPS: 2142.681985377594</p>
+<p>Data bloat:7.389 MiB</p>
+<p>Time To Finality: 1983</p>
+<p>Node ID:
+6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b</p>
+<p>Total Time: 22021</p>
+<p>Total Transactions: 7884</p>
+<p>Pending Transactions: 144</p>
+<p>TPS: 2148.1313291857773</p>
+<p>Data bloat:7.372 MiB</p>
+<p>Time To Finality: 1982</p>
+<p>Node ID:
+d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35</p>
+<p>Total Time: 22021</p>
+<p>Total Transactions: 6649</p>
+<p>Pending Transactions: 185</p>
+<p>TPS: 1811.634349030471</p>
+<p>Data bloat:6.280 MiB</p>
+<p>Time To Finality: 1983</p>
+<p>Node ID:
+4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce</p>
+<p>Total Time: 22021</p>
+<p>Total Transactions: 7257</p>
+<p>Pending Transactions: 157</p>
+<p>TPS: 1977.294400799237</p>
+<p>Data bloat:6.811 MiB</p>
+<p>Time To Finality: 1982</p>
+<p>We note a decrease in overall TPS, due to an increase in TTF (Time To
+Finality), as node participation increases, asynchronous processing can
+increase, but finality also increases.</p>
+<p>4 nodes</p>
+<p>500 transactions every 100 milliseconds for each node</p>
+<p>Event blocks created every 100 milliseconds</p>
+<p>Node ID:
+5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9</p>
+<p>Total Time: 19726</p>
+<p>Total Transactions: 3887</p>
+<p>Pending Transactions: 83</p>
+<p>TPS: 1182.2974754131603</p>
+<p>Data bloat:3.676 MiB</p>
+<p>Time To Finality: 2859</p>
+<p>Node ID:
+6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b</p>
+<p>Total Time: 19726</p>
+<p>Total Transactions: 3945</p>
+<p>Pending Transactions: 75</p>
+<p>TPS: 1199.9391665821759</p>
+<p>Data bloat:3.719 MiB</p>
+<p>Time To Finality: 2860</p>
+<p>Node ID:
+d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35</p>
+<p>Total Time: 19726</p>
+<p>Total Transactions: 3883</p>
+<p>Pending Transactions: 63</p>
+<p>TPS: 1181.0808070566766</p>
+<p>Data bloat:3.655 MiB</p>
+<p>Time To Finality: 2860</p>
+<p>Node ID:
+4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce</p>
+<p>Total Time: 19726</p>
+<p>Total Transactions: 3679</p>
+<p>Pending Transactions: 101</p>
+<p>TPS: 1119.0307208760012</p>
+<p>Data bloat:3.504 MiB</p>
+<p>Time To Finality: 2859</p>
+<p>Node ID:
+4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a</p>
+<p>Total Time: 19726</p>
+<p>Total Transactions: 3201</p>
+<p>Pending Transactions: 73</p>
+<p>TPS: 973.6388522761837</p>
+<p>Data bloat:3.043 MiB</p>
+<p>Time To Finality: 2859</p>
+<p>Node ID:
+ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d</p>
+<p>Total Time: 19726</p>
+<p>Total Transactions: 3221</p>
+<p>Pending Transactions: 95</p>
+<p>TPS: 979.7221940586029</p>
+<p>Data bloat:3.080 MiB</p>
+<p>Time To Finality: 2859</p>
+<p>Node ID:
+e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683</p>
+<p>Total Time: 19727</p>
+<p>Total Transactions: 3255</p>
+<p>Pending Transactions: 101</p>
+<p>TPS: 990.0136868251635</p>
+<p>Data bloat:3.118 MiB</p>
+<p>Time To Finality: 2859</p>
+<p>Node ID:
+7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451</p>
+<p>Total Time: 19726</p>
+<p>Total Transactions: 3563</p>
+<p>Pending Transactions: 92</p>
+<p>TPS: 1083.74733853797</p>
+<p>Data bloat:3.393 MiB</p>
+<p>Time To Finality: 2860</p>
+<p>At 8 nodes we have further degrading of TPS and a slight increase in TTF
+(Optimized path searching between 4 and 8 nodes only increases by a
+difficulty of 1)</p>
+<p>Thus, the greater the participation of nodes, the higher the
+asynchronous transaction processing at a trade off of increase finality.</p>
+<p>[1] No real finality (longest chain rule)</p>

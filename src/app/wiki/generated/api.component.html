@@ -1,0 +1,210 @@
+<!-- GENERATED FROM './api.component.md'. EDIT THAT, XOR DELETE AND EDIT THIS! -->
+
+<h1 id="api">API</h1>
+<p>As mentioned in the :ref:<code>design</code> section, Lachesis communicates with the App 
+through an <code>AppProxy</code> interface, which exposes three methods for Lachesis to 
+call the App. Here we explain how to implement this API. </p>
+<p><strong>Note</strong>: 
+The Snapshot and Restore methods of the API are still work in progress. They are 
+necessary for the :ref:<code>fastsync</code> protocol which is not completely ready yet. It 
+is safe to just implement stubs for these methods.</p>
+<h2 id="inmem">Inmem</h2>
+<p>The <code>InmemProxy</code> uses native callback handlers to enable Lachesis to call 
+methods on the App directly. Applications need only implement the 
+<code>ProxyHandler</code> interface and pass that to an <code>InmemProxy</code>.</p>
+<p>Here is a quick example of how to use Lachesis as an in-memory engine (in the same 
+process as your handler):</p>
+
+<pre><code class="lang-go">package main
+
+import (
+    &quot;github.com/andrecronje/lachesis/src/lachesis&quot;
+    &quot;github.com/andrecronje/lachesis/src/crypto&quot;
+    &quot;github.com/andrecronje/lachesis/src/poset&quot;
+    &quot;github.com/andrecronje/lachesis/src/proxy/inmem&quot;
+)
+
+// Implements proxy.ProxyHandler interface
+type Handler struct &#0123;
+    stateHash []byte
+}
+
+// Called when a new block is committed by Lachesis. This particular example 
+// just computes the stateHash incrementaly with incoming blocks.
+func (h *Handler) CommitHandler(block poset.Block) (stateHash []byte, err error) &#0123;
+    hash := h.stateHash
+
+    for _, tx := range block.Transactions() &#0123;
+        hash = crypto.SimpleHashFromTwoHashes(hash, crypto.SHA256(tx))
+    }
+
+    h.stateHash = hash
+
+    return h.stateHash, nil
+}
+
+// Called when syncing with the network
+func (h *Handler) SnapshotHandler(blockIndex int) (snapshot []byte, err error) &#0123;
+    return []byte&#0123;}, nil
+}
+
+// Called when syncing with the network
+func (h *Handler) RestoreHandler(snapshot []byte) (stateHash []byte, err error) &#0123;
+    return []byte&#0123;}, nil
+}
+
+func NewHandler() *Handler &#0123;
+    return &amp;Handler&#0123;}
+}
+
+func main() &#0123;
+
+    config := lachesis.NewDefaultConfig()
+
+    // To use lachesis as an internal engine we use InmemProxy.
+    proxy := inmem.NewInmemProxy(NewHandler(), config.Logger)
+
+    config.Proxy = proxy
+
+    // Create the engine with the provided config
+    engine := lachesis.NewLachesis(config)
+
+    // Initialize the engine
+    if err := engine.Init(); err != nil &#0123;
+        panic(err)
+    }
+
+    // Submit a transaction directly through the Proxy
+    go func() &#0123; proxy.SubmitTx([]byte(&quot;some content&quot;)) }()
+
+    // This is a blocking call
+    engine.Run()
+}
+</code></pre>
+<h2 id="socket">Socket</h2>
+<p>The <code>SocketProxy</code> is simply a TCP server that accepts <code>SubmitTx</code> requests, and 
+calls remote methods on the App through a JSON-RPC interface. The App is 
+therefore expected to implement its own component to send out SubmitTx 
+requests through TCP, and receive JSON-RPC messages from the remote Lachesis node.</p>
+<p>The advantage of using a TCP interface is that it provides the freedom to 
+implement the application in any programming language. The specification of the
+JSON-RPC interface is provided below, but here is an example of how to use our 
+Go implementation, <code>SocketLachesisProxy</code>, to connect to a remote Lachesis node.</p>
+<p>Assuming there is a Lachesis node running with its proxy listening on 
+<code>127.0.0.1:1338</code> and configured to speak to an App at <code>127.0.0.1:1339</code>
+(these are the default values):</p>
+
+<pre><code class="lang-go">package main
+
+import (
+    &quot;time&quot;
+
+    &quot;github.com/andrecronje/lachesis/src/crypto&quot;
+    &quot;github.com/andrecronje/lachesis/src/poset&quot;
+    &quot;github.com/andrecronje/lachesis/src/proxy/socket/lachesis&quot;
+)
+
+// Implements proxy.ProxyHandler interface
+type Handler struct &#0123;
+    stateHash []byte
+}
+
+// Called when a new block is coming. This particular example just computes 
+// the stateHash incrementally with incoming blocks
+func (h *Handler) CommitHandler(block poset.Block) (stateHash []byte, err error) &#0123;
+    hash := h.stateHash
+
+    for _, tx := range block.Transactions() &#0123;
+        hash = crypto.SimpleHashFromTwoHashes(hash, crypto.SHA256(tx))
+    }
+
+    h.stateHash = hash
+
+    return h.stateHash, nil
+}
+
+// Called when syncing with the network
+func (h *Handler) SnapshotHandler(blockIndex int) (snapshot []byte, err error) &#0123;
+    return []byte&#0123;}, nil
+}
+
+// Called when syncing with the network
+func (h *Handler) RestoreHandler(snapshot []byte) (stateHash []byte, err error) &#0123;
+    return []byte&#0123;}, nil
+}
+
+func NewHandler() *Handler &#0123;
+    return &amp;Handler&#0123;}
+}
+
+func main() &#0123;
+    // Connect to the lachesis proxy at :1338 and listen on :1339.
+    // The Handler ties back to the application state.
+    proxy, err := lachesis.NewSocketLachesisProxy(&quot;127.0.0.1:1338&quot;, &quot;127.0.0.1:1339&quot;, NewHandler(), 1*time.Second, nil)
+
+    // Verify that it can listen
+    if err != nil &#0123;
+        panic(err)
+    }
+
+    // Verify that it can connect and submit a transaction
+    if err := proxy.SubmitTx([]byte(&quot;some content&quot;)); err != nil &#0123;
+        panic(err)
+    }
+
+    // Wait indefinitly
+    for &#0123;
+        time.Sleep(time.Second)
+    }
+}
+</code></pre>
+<p>Example SubmitTx request (from App to Lachesis):</p>
+
+<pre><code>request: &#0123;&quot;method&quot;:&quot;Lachesis.SubmitTx&quot;,&quot;params&quot;:[&quot;Y2xpZW50IDE6IGhlbGxv&quot;],&quot;id&quot;:0}
+response: &#0123;&quot;id&quot;:0,&quot;result&quot;:true,&quot;error&quot;:null}
+</code></pre>
+<p>Note that the Proxy API is <strong>not</strong> over HTTP; It is raw JSON over TCP. Here is 
+an example of how to make a SubmitTx request manually:  </p>
+
+<pre><code class="lang-bash">printf &quot;&#0123;\&quot;method\&quot;:\&quot;Lachesis.SubmitTx\&quot;,\&quot;params\&quot;:[\&quot;Y2xpZW50IDE6IGhlbGxv\&quot;],\&quot;id\&quot;:0}&quot; | nc -v  172.77.5.1 1338
+</code></pre>
+<p>Example CommitBlock request (from Lachesis to App):</p>
+<p>  request:</p>
+
+<pre><code class="lang-json">&#0123;
+    &quot;method&quot;: &quot;State.CommitBlock&quot;,
+    &quot;params&quot;: [
+        &#0123;
+        &quot;Body&quot;: &#0123;
+            &quot;Index&quot;: 0,
+            &quot;RoundReceived&quot;: 7,
+            &quot;StateHash&quot;: null,
+            &quot;FrameHash&quot;: &quot;gdwRCdwxoyLUyzzRK6N31rlJFBJu5By/vDk5gSQHJHQ=&quot;,
+            &quot;Transactions&quot;: [
+            &quot;Tm9kZTEgVHg5&quot;,
+            &quot;Tm9kZTEgVHgx&quot;,
+            &quot;Tm9kZTEgVHgy&quot;,
+            &quot;Tm9kZTEgVHgz&quot;,
+            &quot;Tm9kZTEgVHg0&quot;,
+            &quot;Tm9kZTEgVHg1&quot;,
+            &quot;Tm9kZTEgVHg2&quot;,
+            &quot;Tm9kZTEgVHg3&quot;,
+            &quot;Tm9kZTEgVHg4&quot;,
+            &quot;Tm9kZTEgVHgxMA==&quot;
+            ]
+        },
+        &quot;Signatures&quot;: &#0123;}
+        }
+    ],
+    &quot;id&quot;: 0
+}
+</code></pre>
+<p>  response:</p>
+
+<pre><code class="lang-json">&#0123;&quot;id&quot;:0,&quot;result&quot;:&#0123;&quot;Hash&quot;:&quot;6SKQataObI6oSY5n6mvf1swZR3T4Tek+C8yJmGijF00=&quot;},&quot;error&quot;:null}
+</code></pre>
+<p>The content of the request&#39;s &quot;params&quot; is the JSON representation of a Block 
+with a RoundReceived of 7 and 10 transactions. The transactions themselves are 
+base64 string encodings.</p>
+<p>The response&#39;s Hash value is the base64 representation of the application&#39;s 
+State-hash resulting from processing the block&#39;s transaction sequentially.</p>

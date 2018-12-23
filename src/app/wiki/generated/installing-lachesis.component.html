@@ -1,0 +1,18 @@
+<!-- GENERATED FROM './installing-lachesis.component.md'. EDIT THAT, XOR DELETE AND EDIT THIS! -->
+
+<p>This guide has been moved to: <a href="https://fantom-foundation.github.io/guide/getting-started">https://fantom-foundation.github.io/guide/getting-started</a></p>
+<hr>
+<h3 id="lachesis-and-dependencies">Lachesis and dependencies</h3>
+<p>Clone the <a href="https://github.com/andrecronje/lachesis">repository</a> in the appropriate
+GOPATH subdirectory:</p>
+
+<pre><code class="lang-bash">$ mkdir -p $GOPATH/src/github.com/andrecronje/
+$ cd $GOPATH/src/github.com/andrecronje
+[...]/andrecronje$ git clone https://github.com/andrecronje/lachesis.git
+</code></pre>
+<p>Lachesis uses <a href="http://github.com/Masterminds/glide">Glide</a> to manage dependencies.</p>
+
+<pre><code class="lang-bash">[...]/lachesis$ curl https://glide.sh/get | sh
+[...]/lachesis$ glide install
+</code></pre>
+<p>This will download all dependencies and put them in the <strong>vendor</strong> folder.</p>

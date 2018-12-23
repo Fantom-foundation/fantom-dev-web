@@ -1,0 +1,221 @@
+<!-- GENERATED FROM './usage.component.md'. EDIT THAT, XOR DELETE AND EDIT THIS! -->
+
+<h1 id="usage">Usage</h1>
+<p>In this section we will guide you through deploying an application on top of 
+Lachesis. Lachesis comes with the Dummy application which is used in this 
+demonstration. It is a simple chat application where participants write 
+messages on a channel and Lachesis guarantees that everyone sees the same messages 
+in the same order.</p>
+<h2 id="docker">Docker</h2>
+<p>We have provided a series of scripts to bootstrap a demo. Let us first use the 
+easy method to view the demo and then we will take a closer look at what is 
+happening behind the scenes.  </p>
+<p>Make sure you have <code>Docker &lt;https://docker.com&gt;</code>__ installed.  </p>
+<p>The demo will pull Docker images from our <code>official public Docker registry 
+&lt;https://hub.docker.com/u/andrecronje/&gt;</code>__ </p>
+
+<pre><code>[...]/lachesis$ cd demo
+[...]/lachesis/demo$ make
+</code></pre>
+<p>Once the testnet is started, a script is automatically launched to monitor 
+consensus figures:  </p>
+
+<pre><code>consensus_events:180 consensus_transactions:40 events_per_second:0.00 id:1 last_block_index:3 last_consensus_round:17 num_peers:3 round_events:7 rounds_per_second:0.00 state:Babbling sync_rate:1.00 transaction_pool:0 undetermined_events:18
+consensus_events:180 consensus_transactions:40 events_per_second:0.00 id:3 last_block_index:3 last_consensus_round:17 num_peers:3 round_events:7 rounds_per_second:0.00 state:Babbling sync_rate:1.00 transaction_pool:0 undetermined_events:20
+consensus_events:180 consensus_transactions:40 events_per_second:0.00 id:2 last_block_index:3 last_consensus_round:17 num_peers:3 round_events:7 rounds_per_second:0.00 state:Babbling sync_rate:1.00 transaction_pool:0 undetermined_events:21
+consensus_events:180 consensus_transactions:40 events_per_second:0.00 id:0 last_block_index:3 last_consensus_round:17 num_peers:3 round_events:7 rounds_per_second:0.00 state:Babbling sync_rate:1.00 transaction_pool:0 undetermined_events:20
+</code></pre>
+<p>Running <code>docker ps -a</code> will show you that 9 docker containers have been launched:  </p>
+
+<pre><code>[...]/lachesis/demo$ docker ps -a
+CONTAINER ID        IMAGE                    COMMAND                  CREATED             STATUS              PORTS                   NAMES
+ba80ef275f22        andrecronje/watcher   &quot;/watch.sh&quot;              48 seconds ago      Up 7 seconds                                watcher
+4620ed62a67d        andrecronje/dummy     &quot;dummy &#39;--name=client&quot;   49 seconds ago      Up 48 seconds       1339/tcp                client4
+847ea77bd7fc        andrecronje/lachesis    &quot;lachesis run --cache_s&quot;   50 seconds ago      Up 49 seconds       80/tcp, 1337-1338/tcp   node4
+11df03bf9690        andrecronje/dummy     &quot;dummy &#39;--name=client&quot;   51 seconds ago      Up 50 seconds       1339/tcp                client3
+00af002747ca        andrecronje/lachesis    &quot;lachesis run --cache_s&quot;   52 seconds ago      Up 50 seconds       80/tcp, 1337-1338/tcp   node3
+b2011d3d65bb        andrecronje/dummy     &quot;dummy &#39;--name=client&quot;   53 seconds ago      Up 51 seconds       1339/tcp                client2
+e953b50bc1db        andrecronje/lachesis    &quot;lachesis run --cache_s&quot;   53 seconds ago      Up 52 seconds       80/tcp, 1337-1338/tcp   node2
+0c9dd65de193        andrecronje/dummy     &quot;dummy &#39;--name=client&quot;   54 seconds ago      Up 53 seconds       1339/tcp                client1
+d1f4e5008d4d        andrecronje/lachesis    &quot;lachesis run --cache_s&quot;   55 seconds ago      Up 54 seconds       80/tcp, 1337-1338/tcp   node1
+</code></pre>
+<p>Indeed, each node is comprised of an App and a Lachesis node (cf Design section).
+The <code>watcher</code> container monitors consensus figures.</p>
+<p>Run the <code>demo</code> script to play with the <code>Dummy App</code> which is a simple chat application
+powered by the Lachesis consensus platform:</p>
+
+<pre><code>[...]/lachesis/demo$ make demo
+</code></pre>
+<p>.. image:: assets/demo.png</p>
+<p>Finally, stop the testnet:</p>
+
+<pre><code>[...]/lachesis/demo$ make stop
+</code></pre>
+<h2 id="manual-setup">Manual Setup</h2>
+<p>The above scripts hide a lot of the complications involved in setting up a 
+Lachesis network. They generate the configuration files automatically, copy them 
+to the right places and launch the nodes in Docker containers. We recommend 
+looking at these scripts closely to understand how the demo works. Here, we will 
+attempt to explain the individual steps that take place behind the scenes.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Lachesis reads configuration from the directory specified by the <code>datadir</code> flag 
+which defaults to <code>~/.lachesis</code> on linux/osx. This directory must contain two 
+files:</p>
+
+<ul>
+<li><code>peers.json</code>  : Lists all the participants in the network.</li>
+<li><code>priv_key.pem</code>: Contains the private key of the validator running the node. </li>
+</ul>
+<p>Every participant has a cryptographic key-pair that is used to encrypt, sign and 
+verify messages. The private key is secret but the public key is used by other 
+nodes to verify messages signed with the private key. The encryption scheme used 
+by Lachesis is ECDSA with the P256 curve.</p>
+<p>To run a Lachesis network, it is necessary to predefine who the participants are 
+going to be. Each participant will generate a key-pair and decide which network 
+address it is going to be using for the Lachesis protocol. Someone, or some 
+process, then needs to aggregate the public keys and network addresses of all 
+participants into a single file - the peers.json file. Every participant uses a 
+copy of the same peers.json file. Lachesis will read that file to identify the 
+participants in the network, communicate with them and verify their 
+cryptographic signatures.</p>
+<p>To generate key-pairs in a format usable by Lachesis, we have created the 
+<code>keygen</code> command. It is left to the user to derive a scheme to produce the 
+configuration files but the docker demo scripts are a good place to start.</p>
+<p>So let us say I want to participate in a Lachesis network. I am going to start by 
+running <code>lachesis keygen</code> to create a key-pair:</p>
+<p>::</p>
+<p>  lachesis keygen
+  Your private key has been saved to: /home/martin/.lachesis/priv_key.pem
+  Your public key has been saved to: /home/martin/.lachesis/key.pub</p>
+<p>The private key looks something like this:</p>
+<p>::</p>
+<p>  -----BEGIN EC PRIVATE KEY-----
+  MHcCAQEEIJ3orqofiSXu07mD+f46gZFK3EKSTqhXsbLVmA/aLmyqoAoGCCqGSM49
+  AwEHoUQDQgAEXgNNc8hJdWrntlFcpg2WpakRsTpNi0W8DgsC7bRQCd9szAdO6298
+  Z5V0D5k2ZO3ulw+KcXyJNE+EN/QSvfDRfA==
+  -----END EC PRIVATE KEY-----</p>
+<p>and the corresponding public key looks like this:</p>
+<p>::</p>
+<p>  0x045E034D73C849756AE7B6515CA60D96A5A911B13A4D8B45BC0E0B02EDB45009DF6CCC074EEB6F7C6795740F993664EDEE970F8A717C89344F8437F412BDF0D17C</p>
+<p><strong>DO NOT REUSE THESE KEYS</strong></p>
+<p>Next, I am going to copy the public key (key.pub) and communicate it to whoever 
+is responsible for producing the peers.json file. At the same time, I will tell 
+them that I am going to be listening on 172.77.5.2:1337.</p>
+<p>Suppose three other people do the same thing. The resulting peers.json file 
+could look something like this:</p>
+
+<pre><code class="lang-json">[
+    &#0123;
+        &quot;NetAddr&quot;:&quot;172.77.5.1:1337&quot;,
+        &quot;PubKeyHex&quot;:&quot;0x0471AEE3CAE4E8442D37C9F5481FB32C4531511988652DF923B79ED4ED992021183D31E0F6FBFE96D89B6D03D7250292DFECD4FC414D83A5C38FA3FAD0D8572864&quot;
+    },
+    &#0123;
+        &quot;NetAddr&quot;:&quot;172.77.5.2:1337&quot;,
+        &quot;PubKeyHex&quot;:&quot;0x045E034D73C849756AE7B6515CA60D96A5A911B13A4D8B45BC0E0B02EDB45009DF6CCC074EEB6F7C6795740F993664EDEE970F8A717C89344F8437F412BDF0D17C&quot;
+    },
+    &#0123;
+        &quot;NetAddr&quot;:&quot;172.77.5.3:1337&quot;,
+        &quot;PubKeyHex&quot;:&quot;0x047CCCD40D90B331C64CE27911D3A31AF7DC16C1EA6D570FDC2120920663E0A678D7B5D0C19B6A77FEA829F8198F4F487B68206B93B7AD17D7C49CA7E0164D0033&quot;
+    },
+    &#0123;
+        &quot;NetAddr&quot;:&quot;172.77.5.4:1337&quot;,
+        &quot;PubKeyHex&quot;:&quot;0x0406CB5043E7337700E3B154993C872B1C61A84B1A739528C4A10135A3D64939C094B4A999BD21C3D5E9E9ECF15B202414F073795C9483B2F51ADA7EE59EB5EAC4&quot;
+    }
+]
+</code></pre>
+<p>Now everyone is going to take a copy of this peers.json file and put it in a 
+folder together with the priv_key.pem file they generated in the previous step. 
+That is the folder that they need to specify as the datadir when they run 
+Lachesis.</p>
+<h2 id="lachesis-executable">Lachesis Executable</h2>
+<p>Let us take a look at the help provided by the Lachesis CLI:</p>
+<p>::</p>
+<p>  Run node</p>
+<p>  Usage:
+    lachesis run [flags]</p>
+<p>  Flags:
+        --cache-size int          Number of items in LRU caches (default 500)
+    -c, --client-connect string   IP:Port to connect to client (default &quot;127.0.0.1:1339&quot;)
+        --datadir string          Top-level directory for configuration and data (default &quot;/home/martin/.lachesis&quot;)
+        --heartbeat duration      Time between gossips (default 1s)
+    -h, --help                    help for run
+    -l, --listen string           Listen IP:Port for lachesis node (default &quot;:1337&quot;)
+        --log string              debug, info, warn, error, fatal, panic
+        --max-pool int            Connection pool size max (default 2)
+    -p, --proxy-listen string     Listen IP:Port for lachesis proxy (default &quot;127.0.0.1:1338&quot;)
+    -s, --service-listen string   Listen IP:Port for HTTP service
+        --standalone              Do not create a proxy
+        --store                   Use badgerDB instead of in-mem DB
+        --sync-limit int          Max number of events for sync (default 100)
+    -t, --timeout duration        TCP Timeout (default 1s)</p>
+<p>So we have just seen what the <code>datadir</code> flag does. The <code>listen</code> flag 
+corresponds to the NetAddr in the peers.json file; that is the endpoint that 
+Lachesis uses to communicate with other Lachesis nodes.</p>
+<p>As we explained in the architecture section, each Lachesis node works in 
+conjunction with an application for which it orders transactions. When Lachesis 
+and the application are connected by a TCP interface, we specify two other 
+endpoints:</p>
+
+<ul>
+<li><code>proxy-listen</code>  : where Lachesis listens for transactions from the App</li>
+<li><code>client-connect</code> : where the App listens for transactions from Lachesis </li>
+</ul>
+<p>We can also specify where Lachesis exposes its HTTP API providing information on 
+the Poset and Blockchain data store. This is controlled by the optional 
+<code>service-listen</code> flag.</p>
+<p>Finally, we can choose to run Lachesis with a database backend or only with an 
+in-memory cache. With the <code>store</code> flag set, Lachesis will look for a database 
+file in <code>datadir</code>/babdger_db. If the file exists, the node will load the 
+database and bootstrap itself to a state consistent with the database and it 
+will be able to proceed with the consensus algorithm from there. If the file 
+does not exist yet, it will be created and the node will start from a clean 
+state. </p>
+<p>Here is how the Docker demo starts Lachesis nodes together wth the Dummy 
+application:</p>
+<p>::</p>
+
+<pre><code>for i in $(seq 1 $N)
+do
+    docker run -d --name=client$i --net=lachesisnet --ip=172.77.5.$(($N+$i)) -it andrecronje/dummy:0.4.0 \
+    --name=&quot;client $i&quot; \
+    --client-listen=&quot;172.77.5.$(($N+$i)):1339&quot; \
+    --proxy-connect=&quot;172.77.5.$i:1338&quot; \
+    --discard \
+    --log=&quot;debug&quot; 
+done
+
+for i in $(seq 1 $N)
+do
+    docker create --name=node$i --net=lachesisnet --ip=172.77.5.$i andrecronje/lachesis:0.4.0 run \
+    --cache-size=50000 \
+    --timeout=200ms \
+    --heartbeat=10ms \
+    --listen=&quot;172.77.5.$i:1337&quot; \
+    --proxy-listen=&quot;172.77.5.$i:1338&quot; \
+    --client-connect=&quot;172.77.5.$(($N+$i)):1339&quot; \
+    --service-listen=&quot;172.77.5.$i:80&quot; \
+    --sync-limit=1000 \
+    --store \
+    --log=&quot;debug&quot;
+
+    docker cp $MPWD/conf/node$i node$i:/.lachesis
+    docker start node$i
+done
+</code></pre>
+<h2 id="stats-blocks-and-logs">Stats, blocks and Logs</h2>
+<p>Once a node is up and running, we can call the <code>stats</code> endpoint exposed by the 
+HTTP service:</p>
+<p>::</p>
+
+<pre><code>curl -s http://172.77.5.1:80/stats
+</code></pre>
+<p>or request to see a specific block:</p>
+<p>::</p>
+
+<pre><code>curl -s http://172.77.5.1:80/block/1
+</code></pre>
+<p>Or we can look at the logs produced by Lachesis:</p>
+<p>::</p>
+
+<pre><code>docker logs node1
+</code></pre>
