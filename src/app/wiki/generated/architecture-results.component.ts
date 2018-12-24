@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-architecture-results',
   templateUrl: './architecture-results.component.html',
-  styles: []
+  styleUrls: []
 })
 export class ArchitectureResultsComponent {}

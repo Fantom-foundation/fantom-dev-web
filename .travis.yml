@@ -21,7 +21,7 @@ jobs:
     - stage: deploy
       script:
         - cd "$TRAVIS_BUILD_DIR"
-        - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-rfcs' -l -b 'make html_body' -e '.html' -i "import { NgxPageScrollModule } from 'ngx-page-scroll';" -f '.replace(/href="#/g, `pageScroll href="#`)' -r rfc -vv
+        - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-rfcs' -l -b 'make html_body' -e '.html' -i "import { NgxPageScrollModule } from 'ngx-page-scroll';" -f '.replace(/href="#/g, `pageScroll href="#`)' -r rfc -s 'https://svn.tools.ietf.org/svn/tools/xml2rfc/trunk/cli/xml2rfc/data/xml2rfc.css' -vv
         - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/go-lachesis.wiki.git' -l -o '.md' -vv
         - ng-md-components -d "$PWD"
         - ng build --prod && cp *.md dist/fantom-dev && ngh --dir='dist/fantom-dev' --repo=https://GH_TOKEN@github.com/Fantom-foundation/Fantom-foundation.github.io --name="$(git log -1 --pretty=format:'%an')" --branch='master' --message="$TRAVIS_COMMIT_MESSAGE"

@@ -15,69 +15,69 @@ methods on the App directly. Applications need only implement the
 <p>Here is a quick example of how to use Lachesis as an in-memory engine (in the same 
 process as your handler):</p>
 
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;github.com/andrecronje/lachesis/src/lachesis&quot;
-    &quot;github.com/andrecronje/lachesis/src/crypto&quot;
-    &quot;github.com/andrecronje/lachesis/src/poset&quot;
-    &quot;github.com/andrecronje/lachesis/src/proxy/inmem&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">"github.com/andrecronje/lachesis/src/lachesis"</span>
+    <span class="hljs-string">"github.com/andrecronje/lachesis/src/crypto"</span>
+    <span class="hljs-string">"github.com/andrecronje/lachesis/src/poset"</span>
+    <span class="hljs-string">"github.com/andrecronje/lachesis/src/proxy/inmem"</span>
 )
 
-// Implements proxy.ProxyHandler interface
-type Handler struct &#0123;
-    stateHash []byte
+<span class="hljs-comment">// Implements proxy.ProxyHandler interface</span>
+<span class="hljs-keyword">type</span> Handler <span class="hljs-keyword">struct</span> &#0123;
+    stateHash []<span class="hljs-keyword">byte</span>
 }
 
-// Called when a new block is committed by Lachesis. This particular example 
-// just computes the stateHash incrementaly with incoming blocks.
-func (h *Handler) CommitHandler(block poset.Block) (stateHash []byte, err error) &#0123;
+<span class="hljs-comment">// Called when a new block is committed by Lachesis. This particular example </span>
+<span class="hljs-comment">// just computes the stateHash incrementaly with incoming blocks.</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h *Handler)</span> <span class="hljs-title">CommitHandler</span><span class="hljs-params">(block poset.Block)</span> <span class="hljs-params">(stateHash []<span class="hljs-keyword">byte</span>, err error)</span></span> &#0123;
     hash := h.stateHash
 
-    for _, tx := range block.Transactions() &#0123;
+    <span class="hljs-keyword">for</span> _, tx := <span class="hljs-keyword">range</span> block.Transactions() &#0123;
         hash = crypto.SimpleHashFromTwoHashes(hash, crypto.SHA256(tx))
     }
 
     h.stateHash = hash
 
-    return h.stateHash, nil
+    <span class="hljs-keyword">return</span> h.stateHash, <span class="hljs-literal">nil</span>
 }
 
-// Called when syncing with the network
-func (h *Handler) SnapshotHandler(blockIndex int) (snapshot []byte, err error) &#0123;
-    return []byte&#0123;}, nil
+<span class="hljs-comment">// Called when syncing with the network</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h *Handler)</span> <span class="hljs-title">SnapshotHandler</span><span class="hljs-params">(blockIndex <span class="hljs-keyword">int</span>)</span> <span class="hljs-params">(snapshot []<span class="hljs-keyword">byte</span>, err error)</span></span> &#0123;
+    <span class="hljs-keyword">return</span> []<span class="hljs-keyword">byte</span>&#0123;}, <span class="hljs-literal">nil</span>
 }
 
-// Called when syncing with the network
-func (h *Handler) RestoreHandler(snapshot []byte) (stateHash []byte, err error) &#0123;
-    return []byte&#0123;}, nil
+<span class="hljs-comment">// Called when syncing with the network</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h *Handler)</span> <span class="hljs-title">RestoreHandler</span><span class="hljs-params">(snapshot []<span class="hljs-keyword">byte</span>)</span> <span class="hljs-params">(stateHash []<span class="hljs-keyword">byte</span>, err error)</span></span> &#0123;
+    <span class="hljs-keyword">return</span> []<span class="hljs-keyword">byte</span>&#0123;}, <span class="hljs-literal">nil</span>
 }
 
-func NewHandler() *Handler &#0123;
-    return &amp;Handler&#0123;}
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewHandler</span><span class="hljs-params">()</span> *<span class="hljs-title">Handler</span></span> &#0123;
+    <span class="hljs-keyword">return</span> &amp;Handler&#0123;}
 }
 
-func main() &#0123;
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#0123;
 
     config := lachesis.NewDefaultConfig()
 
-    // To use lachesis as an internal engine we use InmemProxy.
+    <span class="hljs-comment">// To use lachesis as an internal engine we use InmemProxy.</span>
     proxy := inmem.NewInmemProxy(NewHandler(), config.Logger)
 
     config.Proxy = proxy
 
-    // Create the engine with the provided config
+    <span class="hljs-comment">// Create the engine with the provided config</span>
     engine := lachesis.NewLachesis(config)
 
-    // Initialize the engine
-    if err := engine.Init(); err != nil &#0123;
-        panic(err)
+    <span class="hljs-comment">// Initialize the engine</span>
+    <span class="hljs-keyword">if</span> err := engine.Init(); err != <span class="hljs-literal">nil</span> &#0123;
+        <span class="hljs-built_in">panic</span>(err)
     }
 
-    // Submit a transaction directly through the Proxy
-    go func() &#0123; proxy.SubmitTx([]byte(&quot;some content&quot;)) }()
+    <span class="hljs-comment">// Submit a transaction directly through the Proxy</span>
+    <span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#0123; proxy.SubmitTx([]<span class="hljs-keyword">byte</span>(<span class="hljs-string">"some content"</span>)) }()
 
-    // This is a blocking call
+    <span class="hljs-comment">// This is a blocking call</span>
     engine.Run()
 }
 </code></pre>
@@ -94,66 +94,66 @@ Go implementation, <code>SocketLachesisProxy</code>, to connect to a remote Lach
 <code>127.0.0.1:1338</code> and configured to speak to an App at <code>127.0.0.1:1339</code>
 (these are the default values):</p>
 
-<pre><code class="lang-go">package main
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
 
-import (
-    &quot;time&quot;
+<span class="hljs-keyword">import</span> (
+    <span class="hljs-string">"time"</span>
 
-    &quot;github.com/andrecronje/lachesis/src/crypto&quot;
-    &quot;github.com/andrecronje/lachesis/src/poset&quot;
-    &quot;github.com/andrecronje/lachesis/src/proxy/socket/lachesis&quot;
+    <span class="hljs-string">"github.com/andrecronje/lachesis/src/crypto"</span>
+    <span class="hljs-string">"github.com/andrecronje/lachesis/src/poset"</span>
+    <span class="hljs-string">"github.com/andrecronje/lachesis/src/proxy/socket/lachesis"</span>
 )
 
-// Implements proxy.ProxyHandler interface
-type Handler struct &#0123;
-    stateHash []byte
+<span class="hljs-comment">// Implements proxy.ProxyHandler interface</span>
+<span class="hljs-keyword">type</span> Handler <span class="hljs-keyword">struct</span> &#0123;
+    stateHash []<span class="hljs-keyword">byte</span>
 }
 
-// Called when a new block is coming. This particular example just computes 
-// the stateHash incrementally with incoming blocks
-func (h *Handler) CommitHandler(block poset.Block) (stateHash []byte, err error) &#0123;
+<span class="hljs-comment">// Called when a new block is coming. This particular example just computes </span>
+<span class="hljs-comment">// the stateHash incrementally with incoming blocks</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h *Handler)</span> <span class="hljs-title">CommitHandler</span><span class="hljs-params">(block poset.Block)</span> <span class="hljs-params">(stateHash []<span class="hljs-keyword">byte</span>, err error)</span></span> &#0123;
     hash := h.stateHash
 
-    for _, tx := range block.Transactions() &#0123;
+    <span class="hljs-keyword">for</span> _, tx := <span class="hljs-keyword">range</span> block.Transactions() &#0123;
         hash = crypto.SimpleHashFromTwoHashes(hash, crypto.SHA256(tx))
     }
 
     h.stateHash = hash
 
-    return h.stateHash, nil
+    <span class="hljs-keyword">return</span> h.stateHash, <span class="hljs-literal">nil</span>
 }
 
-// Called when syncing with the network
-func (h *Handler) SnapshotHandler(blockIndex int) (snapshot []byte, err error) &#0123;
-    return []byte&#0123;}, nil
+<span class="hljs-comment">// Called when syncing with the network</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h *Handler)</span> <span class="hljs-title">SnapshotHandler</span><span class="hljs-params">(blockIndex <span class="hljs-keyword">int</span>)</span> <span class="hljs-params">(snapshot []<span class="hljs-keyword">byte</span>, err error)</span></span> &#0123;
+    <span class="hljs-keyword">return</span> []<span class="hljs-keyword">byte</span>&#0123;}, <span class="hljs-literal">nil</span>
 }
 
-// Called when syncing with the network
-func (h *Handler) RestoreHandler(snapshot []byte) (stateHash []byte, err error) &#0123;
-    return []byte&#0123;}, nil
+<span class="hljs-comment">// Called when syncing with the network</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h *Handler)</span> <span class="hljs-title">RestoreHandler</span><span class="hljs-params">(snapshot []<span class="hljs-keyword">byte</span>)</span> <span class="hljs-params">(stateHash []<span class="hljs-keyword">byte</span>, err error)</span></span> &#0123;
+    <span class="hljs-keyword">return</span> []<span class="hljs-keyword">byte</span>&#0123;}, <span class="hljs-literal">nil</span>
 }
 
-func NewHandler() *Handler &#0123;
-    return &amp;Handler&#0123;}
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewHandler</span><span class="hljs-params">()</span> *<span class="hljs-title">Handler</span></span> &#0123;
+    <span class="hljs-keyword">return</span> &amp;Handler&#0123;}
 }
 
-func main() &#0123;
-    // Connect to the lachesis proxy at :1338 and listen on :1339.
-    // The Handler ties back to the application state.
-    proxy, err := lachesis.NewSocketLachesisProxy(&quot;127.0.0.1:1338&quot;, &quot;127.0.0.1:1339&quot;, NewHandler(), 1*time.Second, nil)
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#0123;
+    <span class="hljs-comment">// Connect to the lachesis proxy at :1338 and listen on :1339.</span>
+    <span class="hljs-comment">// The Handler ties back to the application state.</span>
+    proxy, err := lachesis.NewSocketLachesisProxy(<span class="hljs-string">"127.0.0.1:1338"</span>, <span class="hljs-string">"127.0.0.1:1339"</span>, NewHandler(), <span class="hljs-number">1</span>*time.Second, <span class="hljs-literal">nil</span>)
 
-    // Verify that it can listen
-    if err != nil &#0123;
-        panic(err)
+    <span class="hljs-comment">// Verify that it can listen</span>
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#0123;
+        <span class="hljs-built_in">panic</span>(err)
     }
 
-    // Verify that it can connect and submit a transaction
-    if err := proxy.SubmitTx([]byte(&quot;some content&quot;)); err != nil &#0123;
-        panic(err)
+    <span class="hljs-comment">// Verify that it can connect and submit a transaction</span>
+    <span class="hljs-keyword">if</span> err := proxy.SubmitTx([]<span class="hljs-keyword">byte</span>(<span class="hljs-string">"some content"</span>)); err != <span class="hljs-literal">nil</span> &#0123;
+        <span class="hljs-built_in">panic</span>(err)
     }
 
-    // Wait indefinitly
-    for &#0123;
+    <span class="hljs-comment">// Wait indefinitly</span>
+    <span class="hljs-keyword">for</span> &#0123;
         time.Sleep(time.Second)
     }
 }
@@ -166,42 +166,42 @@ response: &#0123;&quot;id&quot;:0,&quot;result&quot;:true,&quot;error&quot;:null
 <p>Note that the Proxy API is <strong>not</strong> over HTTP; It is raw JSON over TCP. Here is 
 an example of how to make a SubmitTx request manually:  </p>
 
-<pre><code class="lang-bash">printf &quot;&#0123;\&quot;method\&quot;:\&quot;Lachesis.SubmitTx\&quot;,\&quot;params\&quot;:[\&quot;Y2xpZW50IDE6IGhlbGxv\&quot;],\&quot;id\&quot;:0}&quot; | nc -v  172.77.5.1 1338
+<pre><code class="lang-bash"><span class="hljs-built_in">printf</span> <span class="hljs-string">"&#0123;\"method\":\"Lachesis.SubmitTx\",\"params\":[\"Y2xpZW50IDE6IGhlbGxv\"],\"id\":0}"</span> | nc -v  172.77.5.1 1338
 </code></pre>
 <p>Example CommitBlock request (from Lachesis to App):</p>
 <p>  request:</p>
 
 <pre><code class="lang-json">&#0123;
-    &quot;method&quot;: &quot;State.CommitBlock&quot;,
-    &quot;params&quot;: [
+    <span class="hljs-attr">"method"</span>: <span class="hljs-string">"State.CommitBlock"</span>,
+    <span class="hljs-attr">"params"</span>: [
         &#0123;
-        &quot;Body&quot;: &#0123;
-            &quot;Index&quot;: 0,
-            &quot;RoundReceived&quot;: 7,
-            &quot;StateHash&quot;: null,
-            &quot;FrameHash&quot;: &quot;gdwRCdwxoyLUyzzRK6N31rlJFBJu5By/vDk5gSQHJHQ=&quot;,
-            &quot;Transactions&quot;: [
-            &quot;Tm9kZTEgVHg5&quot;,
-            &quot;Tm9kZTEgVHgx&quot;,
-            &quot;Tm9kZTEgVHgy&quot;,
-            &quot;Tm9kZTEgVHgz&quot;,
-            &quot;Tm9kZTEgVHg0&quot;,
-            &quot;Tm9kZTEgVHg1&quot;,
-            &quot;Tm9kZTEgVHg2&quot;,
-            &quot;Tm9kZTEgVHg3&quot;,
-            &quot;Tm9kZTEgVHg4&quot;,
-            &quot;Tm9kZTEgVHgxMA==&quot;
+        <span class="hljs-attr">"Body"</span>: &#0123;
+            <span class="hljs-attr">"Index"</span>: <span class="hljs-number">0</span>,
+            <span class="hljs-attr">"RoundReceived"</span>: <span class="hljs-number">7</span>,
+            <span class="hljs-attr">"StateHash"</span>: <span class="hljs-literal">null</span>,
+            <span class="hljs-attr">"FrameHash"</span>: <span class="hljs-string">"gdwRCdwxoyLUyzzRK6N31rlJFBJu5By/vDk5gSQHJHQ="</span>,
+            <span class="hljs-attr">"Transactions"</span>: [
+            <span class="hljs-string">"Tm9kZTEgVHg5"</span>,
+            <span class="hljs-string">"Tm9kZTEgVHgx"</span>,
+            <span class="hljs-string">"Tm9kZTEgVHgy"</span>,
+            <span class="hljs-string">"Tm9kZTEgVHgz"</span>,
+            <span class="hljs-string">"Tm9kZTEgVHg0"</span>,
+            <span class="hljs-string">"Tm9kZTEgVHg1"</span>,
+            <span class="hljs-string">"Tm9kZTEgVHg2"</span>,
+            <span class="hljs-string">"Tm9kZTEgVHg3"</span>,
+            <span class="hljs-string">"Tm9kZTEgVHg4"</span>,
+            <span class="hljs-string">"Tm9kZTEgVHgxMA=="</span>
             ]
         },
-        &quot;Signatures&quot;: &#0123;}
+        <span class="hljs-attr">"Signatures"</span>: &#0123;}
         }
     ],
-    &quot;id&quot;: 0
+    <span class="hljs-attr">"id"</span>: <span class="hljs-number">0</span>
 }
 </code></pre>
 <p>  response:</p>
 
-<pre><code class="lang-json">&#0123;&quot;id&quot;:0,&quot;result&quot;:&#0123;&quot;Hash&quot;:&quot;6SKQataObI6oSY5n6mvf1swZR3T4Tek+C8yJmGijF00=&quot;},&quot;error&quot;:null}
+<pre><code class="lang-json">&#0123;<span class="hljs-attr">"id"</span>:<span class="hljs-number">0</span>,<span class="hljs-attr">"result"</span>:&#0123;<span class="hljs-attr">"Hash"</span>:<span class="hljs-string">"6SKQataObI6oSY5n6mvf1swZR3T4Tek+C8yJmGijF00="</span>},<span class="hljs-attr">"error"</span>:<span class="hljs-literal">null</span>}
 </code></pre>
 <p>The content of the request&#39;s &quot;params&quot; is the JSON representation of a Block 
 with a RoundReceived of 7 and 10 transactions. The transactions themselves are 

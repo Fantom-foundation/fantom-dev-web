@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-core-components',
   templateUrl: './core-components.component.html',
-  styles: []
+  styleUrls: []
 })
 export class CoreComponentsComponent {}

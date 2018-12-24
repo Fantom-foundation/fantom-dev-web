@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-installing-lachesis',
   templateUrl: './installing-lachesis.component.html',
-  styles: []
+  styleUrls: []
 })
 export class InstallingLachesisComponent {}

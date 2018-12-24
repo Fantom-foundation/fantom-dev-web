@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-rfcs-fantom-framework',
   templateUrl: './rfcs-fantom-framework.component.html',
-  styles: []
+  styleUrls: ['./xml2rfc.css']
 })
 export class RfcsFantomFrameworkComponent {}

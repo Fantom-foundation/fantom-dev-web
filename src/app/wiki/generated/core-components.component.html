@@ -7,10 +7,10 @@ can be inserted. Basically, Frames form a valid foundation for a new Poset,
 such that gossip-about-gossip routines are not discontinued, while earlier 
 records of the gossip history are ignored. </p>
 
-<pre><code class="lang-go">type Frame struct &#0123;
-    Round  int     //RoundReceived
-    Roots  []Root  //[participant ID] =&gt; Root
-    Events []Event //Events with RoundReceived = Round
+<pre><code class="lang-go"><span class="hljs-keyword">type</span> Frame <span class="hljs-keyword">struct</span> &#0123;
+    Round  <span class="hljs-keyword">int</span>     <span class="hljs-comment">//RoundReceived</span>
+    Roots  []Root  <span class="hljs-comment">//[participant ID] =&gt; Root</span>
+    Events []Event <span class="hljs-comment">//Events with RoundReceived = Round</span>
 }
 </code></pre>
 <p>A Frame corresponds to a Poset consensus round. Indeed, the consensus 
@@ -51,17 +51,17 @@ information about the Index, Round, and LamportTimestamp of the corresponding
 Events. The Root itself contains a NextRound field, which helps in calculating 
 the Round of its direct descendant.</p>
 
-<pre><code class="lang-go">type Root struct &#0123;
-  NextRound  int
+<pre><code class="lang-go"><span class="hljs-keyword">type</span> Root <span class="hljs-keyword">struct</span> &#0123;
+  NextRound  <span class="hljs-keyword">int</span>
   SelfParent RootEvent
-  Others     map[string]RootEvent
+  Others     <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]RootEvent
 }
 
-type RootEvent struct &#0123;
-  Hash             string
-  CreatorID        int
-  Index            int
-  LamportTimestamp int
-  Round            int
+<span class="hljs-keyword">type</span> RootEvent <span class="hljs-keyword">struct</span> &#0123;
+  Hash             <span class="hljs-keyword">string</span>
+  CreatorID        <span class="hljs-keyword">int</span>
+  Index            <span class="hljs-keyword">int</span>
+  LamportTimestamp <span class="hljs-keyword">int</span>
+  Round            <span class="hljs-keyword">int</span>
 }
 </code></pre>
