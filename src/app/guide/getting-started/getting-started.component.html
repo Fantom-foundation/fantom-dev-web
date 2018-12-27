@@ -57,8 +57,8 @@ brew install git jq
       </ol>
       <p class="docs-markdown-p">Test that it installed correctly with:</p>
       <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code">
-  git --version
-  cl /?
+git --version
+cl /?
       </code></pre>
     </section>
   </section>
@@ -108,22 +108,17 @@ rustup default nightly
     <h3 class="docs-header-link docs-markdown-h3">
       Step 3: Go Lachesis
     </h3>
-<pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code">
-go get -v github.com/SamuelMarks/batch-ethkey
-</code></pre>
-    <pre class="docs-markdown-pre" *ngIf="os('Linux') || os('macOS')"><code class="lang-bash docs-markdown-code">
-d="$GOPATH/src/github.com/Fantom-foundation"
+    <pre class="docs-markdown-pre"><code class="lang-bash docs-markdown-code">
+go get -v github.com/SamuelMarks/batch-ethkey<span *ngIf="os('Linux') || os('macOS')">d="$GOPATH/src/github.com/Fantom-foundation"
 mkdir -p "$d"
 git clone https://github.com/Fantom-foundation/go-lachesis "$d/go-lachesis"
-glide i
-      </code></pre>
-
-    <pre class="docs-markdown-pre" *ngIf="os('Windows')"><code class="lang-bash docs-markdown-code">
+glide i</span><span *ngIf="os('Windows')">
 set d="%GOPATH%/src/github.com/Fantom-foundation"
 md "%d%"
 git clone https://github.com/Fantom-foundation/go-lachesis "%d%/go-lachesis"
-glide i
-      </code></pre>
+glide i</span>
+ </code></pre>
+
   </section>
 
   <hr>

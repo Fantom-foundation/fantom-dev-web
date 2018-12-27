@@ -36,3 +36,8 @@ app-root > app-guides {
     overflow-y: visible;
   }
 }
+
+.router-outlet-div {
+  padding: 3%;
+  margin: 30px;
+}

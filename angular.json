@@ -29,7 +29,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/app/rfc/generated/xml2rfc.js"
+            ]
           },
           "configurations": {
             "production": {
