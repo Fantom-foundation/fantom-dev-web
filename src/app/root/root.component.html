@@ -1,67 +1,89 @@
 <header class="docs-header-background">
   <div class="docs-header-section">
     <div class="docs-header-headline">
-      <h1 class="mat-h1">Fantom developer ecosystem</h1>
-      <h2>Learn the tech; build the tech</h2>
-      <h3>Beyond Blockchain</h3>
+      <h1 class="mat-h1">Fantom Developer Ecosystem</h1>
+      <div>
+        <p>The Fantom framework is a high transaction throughput decentralised applications platform that can host 
+          performance sensitive applications at a low cost. The performance of the Fantom platform 
+          and the LLVM-IR based virtual machine makes distributed app development as easy as developing 
+          conventional applications. Read below to learn about the technology and research projects that makes 
+          the Fantom network fast and developer friendly.
+        </p>
+      </div>
     </div>
-    <!--
     <div class="docs-header-start">
       <a mat-raised-button class="docs-button" routerLink="/guide/getting-started">Get started</a>
+      <a mat-raised-button class="docs-button" routerLink="/wiki">Wiki</a>
+      <a mat-raised-button class="docs-button" routerLink="/rfc">Specification</a>
     </div>
-    -->
+   
   </div>
 </header>
 
 <div class="docs-homepage-promo">
+  
   <div class="docs-homepage-row">
     <div class="docs-homepage-promo-img">
-      <app-svg-viewer
-        src="../assets/img/homepage/sprintzerotoapp.svg"
-        scaleToContainer="true"></app-svg-viewer>
+      <img src="../assets/img/homepage/lachesis-consensus.jpg" />
     </div>
     <div class="docs-homepage-promo-desc">
-      <h2>Consensus</h2>
-      <p>Rust and Go implementations of the Lachesis consensus.</p>
+      <h2>Asynchronous BFT Consensus</h2>
+      <p> 
+          The Fantom network uses a directed acyclic graph based consensus algorithm that appends transactions asynchronously.
+          Unlike other blockchains, the Fantom network improves transaction throughput as more participants join the network.
+          Transactions have instant finality and fast confirmation times making Fantom applications responsive and easier to
+          develop. 
+      </p>
     </div>
   </div>
+
   <div class="docs-homepage-row docs-homepage-reverse-row">
     <div class="docs-homepage-promo-img">
-      <app-svg-viewer
-        src="../assets/img/homepage/fastandconsistent.svg"
-        scaleToContainer="true"></app-svg-viewer>
+      <img
+        src="../assets/img/homepage/virtual-machine.jpg"/>
+     
     </div>
     <div class="docs-homepage-promo-desc">
-      <h2>Fantom Pay</h2>
-      <p>&hellip;hello world here I go</p>
+      <h2>LLVM-IR based Virtual Machine</h2>
+      <p>
+          Fantom applications run on a high performance register-based virtual machine that consumers LLVM-IR. 
+          Using LLVM-IR providers developers a wide variety of languages to choose from including C/C++, Swift,
+          Kotlin and Rust.
+      </p>
     </div>
   </div>
+
   <div class="docs-homepage-row">
     <div class="docs-homepage-promo-img">
-      <app-svg-viewer
-        src="../assets/img/homepage/versatile.svg"
-        scaleToContainer="true"></app-svg-viewer>
+      <img
+        src="../assets/img/homepage/wallet.jpg" />
+    
+      
     </div>
     <div class="docs-homepage-promo-desc">
-      <h2>Payments</h2>
-      <p>SDK, eCommerce, mPOS, multi currency wallets</p>
+      <h2>Cross Platform Wallet</h2>
+      <p>
+          Download the Fantom wallet and connect to the testnet. Available on iOS, Android, Web,
+          Windows and Mac.
+      </p>
     </div>
   </div>
+
   <div class="docs-homepage-row docs-homepage-reverse-row">
     <div class="docs-homepage-promo-img">
-      <app-svg-viewer
-        src="../assets/img/homepage/optimized.svg"
-        scaleToContainer="true"></app-svg-viewer>
+    
     </div>
     <div class="docs-homepage-promo-desc">
-      <h2>DApp</h2>
-      <p>Develop contracts with frontends, explore others, and share. Documentation and examples provided.</p>
+      <h2>Verifiable Computation</h2>
+      <p>
+          In conjuction with the University of Sydney, Fantom is developing a verifiable computation extensions to
+          the LLVM-IR virtual machine. Verifiable computations allow the network to verify the result of a 
+          smart contract transaction without having to perform the computation improving performance and effeciency. 
+      </p>
     </div>
   </div>
-  <div class="docs-homepage-bottom-start">
-    <a mat-raised-button class="docs-button" routerLink="/guide/getting-started">Get started</a>
-    <a mat-raised-button class="docs-button" routerLink="/wiki">Wiki</a>
-  </div>
+
 </div>
+ 
 
 <!--<app-footer></app-footer>-->
