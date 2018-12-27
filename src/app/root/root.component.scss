@@ -13,7 +13,22 @@ $margin-promotion-sections-small: 15px;
 
 .docs-header-section {
   text-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   padding-top: $margin-promotion-sections;
+  h1 {
+    padding-top: 20px;
+    padding-bottom: 40px;
+  }
+  p {
+    width: 1000px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 28px;
+    margin: 0 0 0 0;
+    padding: 0;
+  }
 }
 
 .docs-header-headline {
@@ -61,8 +76,8 @@ $margin-promotion-sections-small: 15px;
   margin: $margin-promotion-sections 0;
 }
 
-.docs-homepage-row .docs-svg-image{
-  max-width: 90%;
+.docs-homepage-row .img{
+  max-width: 30%;
 }
 
 .docs-homepage-reverse-row {
@@ -74,6 +89,10 @@ $margin-promotion-sections-small: 15px;
   text-align: center;
   margin: $margin-promotion-sections 0;
 }
+.docs-button {
+  margin: 0 20px 20px 0;
+}
+
 
 .docs-homepage-promo-img,
 .docs-homepage-promo-desc {
