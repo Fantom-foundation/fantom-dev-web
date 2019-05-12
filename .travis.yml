@@ -1,3 +1,4 @@
+dist: xenial
 language: node_js
 node_js:
   - lts/*
@@ -9,6 +10,7 @@ before_install:
   - tar xf mmark.tgz
   - sudo ln -s "$PWD/mmark" /usr/local/bin/mmark
   - sudo -H pip3 install xml2rfc
+  - sudo -H pip3 install -U six
 addons:
   apt:
     packages:
@@ -16,6 +18,7 @@ addons:
       - python3-pip
       - python3-html5lib
       - html-xml-utils
+      - tree
 jobs:
   include:
     - stage: deploy
@@ -25,7 +28,9 @@ jobs:
         - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/go-lachesis.wiki.git' -l -o '.md' -vv
         - ng-md-components -d "$PWD"
         - cp /usr/local/lib/python3.*/dist-packages/xml2rfc/data/{xml2rfc.js,xml2rfc.css} src/app/rfc/generated/
-        - ng build --prod && cp *.md dist/fantom-dev && ngh --dir='dist/fantom-dev' --repo=https://GH_TOKEN@github.com/Fantom-foundation/Fantom-foundation.github.io --name="$(git log -1 --pretty=format:'%an')" --branch='master' --message="$TRAVIS_COMMIT_MESSAGE"
+        - ng build --prod
+        - tree -a
+        - cp *.md dist/fantom-dev && ngh --dir='dist/fantom-dev' --repo=https://GH_TOKEN@github.com/Fantom-foundation/Fantom-foundation.github.io --name="$(git log -1 --pretty=format:'%an')" --branch='master' --message="$TRAVIS_COMMIT_MESSAGE"
 branches:
   only:
     - master
