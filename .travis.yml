@@ -21,13 +21,15 @@ addons:
       - python3-pip
       - python3-html5lib
       - html-xml-utils
+      - tree
 jobs:
   include:
     - stage: deploy
       script:
         - cd "$TRAVIS_BUILD_DIR"
-        - npm ci
-        - ls -al
+        - rm -rf node_modules package-lock.json
+        - npm install
+        - tree -a
         - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-rfcs' -l -b 'make html_body' -e '.html' -i "import { NgxPageScrollModule } from 'ngx-page-scroll';" -f '.replace(/href="#/g, `pageScroll href="#`)' -r rfc -s './xml2rfc.css' -vv
         - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/go-lachesis.wiki.git' -l -o '.md' -vv
         - ng-md-components -d "$PWD"
