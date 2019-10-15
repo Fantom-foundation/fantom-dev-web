@@ -1,0 +1,32 @@
+body {
+  padding: 0 0 2em 0;
+}
+
+nav.sub {
+  padding-top: 16px;
+}
+
+.theme-picker {
+  top: 56px;
+}
+
+.sidebar {
+  top: 56px;
+}
+
+.navbar {
+  -ms-flex-align: center;
+  -ms-flex-pack: justify;
+  -ms-flex-wrap: wrap;
+  align-items: center;
+  background-color: orangered;
+  color: rgba(0, 0, 0, .87);
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  min-height: 3.5rem;
+  padding: .625rem 1rem;
+  position: relative;
+  min-width: 100%;
+}
