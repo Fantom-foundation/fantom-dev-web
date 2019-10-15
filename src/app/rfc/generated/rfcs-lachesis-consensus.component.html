@@ -1,5 +1,5 @@
 
-
+    
     <table class="ears">
       <thead>
         <tr>
@@ -13,7 +13,7 @@
 
       <tfoot>
         <tr>
-          <td class="left">Sharma</td>
+          <td class="left">Foundation</td>
 
           <td class="center">Informational</td>
 
@@ -22,7 +22,7 @@
       </tfoot>
     </table>
 
-
+    
 
     <div class="document-information" id="internal-metadata">
       <dl id="identifiers">
@@ -40,7 +40,7 @@
 
         <dt class="label-published">Published:</dt>
 
-        <dd class="published"> <time class="published" datetime="2019-10-14">14 October 2019</time></dd>
+        <dd class="published"> <time class="published" datetime="2019-10-15">15 October 2019</time></dd>
 
         <dt class="label-issn">ISSN:</dt>
 
@@ -50,7 +50,7 @@
 
         <dd class="authors">
           <div class="author">
-            <div class="author-name">R. Sharma</div>
+            <div class="author-name">F. Foundation</div>
 
             <div class="org">Fantom Foundation</div>
           </div>
@@ -213,10 +213,10 @@
         <h2 id="name-introduction"> <a class="section-number selfRef" pageScroll href="#section-1">1. </a><a class="section-name selfRef" pageScroll href="#name-introduction">Introduction</a></h2>
 
         <p id="section-1-1">The lachesis protocol allows a group of
-          participants to agree upon the occurence and ordering of
+          participants to agree upon the occurrence and ordering of
           events over a network. The lachesis consensus protocol can be
           used to implement the common knowledge abstraction layer in
-          the Fantom framework. The particpants must know each other
+          the Fantom framework. The participants must know each other
           and agree upon the total number of participants in the
           network. Participants submit events to the network and the
           network comes to consensus on the ordering and validity of
@@ -233,12 +233,12 @@
 
             <p id="section-1.1-1">The participants in the network are
               mutually agreed upon. Participants are identified by a
-              unique public key. Each particpant must store the public
+              unique public key. Each participant must store the public
               key, the IP address and the Creator's Id of every other
               participant in the network to disk.<a class="pilcrow" pageScroll href="#section-1.1-1">¶</a></p>
 
             <p id="section-1.1-2">A participant may request another
-              participant for a list of participants. The receving
+              participant for a list of participants. The receiving
               participant must respond with a list of participants it
               knows. The response message must include the IP address,
               public key and ID of the participants signed by the
@@ -276,10 +276,10 @@
             <p id="section-1.2-2">A client sends a payload and a
               unique payload identifier to the Participant. The
               participant can create an event block using the payload.
-              If the particpant has accepted the payload, the
-              particpant will respond with message indicating the
+              If the participant has accepted the payload, the
+              participant will respond with message indicating the
               payload is pending. If the participant decides to reject
-              the payload, the particpant must respond with a rejected
+              the payload, the participant must respond with a rejected
               message indicating that the payload is<a class="pilcrow" pageScroll href="#section-1.2-2">¶</a></p>
 
             <div id="client-authentication-process">
@@ -290,7 +290,7 @@
                 <p id="section-1.2.1-1">Undefined in golang
                   implementation<a class="pilcrow" pageScroll href="#section-1.2.1-1">¶</a></p>
 
-                <p id="section-1.2.1-2">A client can updats on the
+                <p id="section-1.2.1-2">A client can updates on the
                   status of their submitted payload by subscribing to
                   messages from a participant. The participant will
                   send messages including the unique payload identifier
@@ -348,7 +348,7 @@
                       <li id="section-1.3.1.1-1.4">
                         <p id="section-1.3.1.1-1.4.1">Creator's Public
                           Key: the 256 bit public key associated with
-                          the particpants private key<a class="pilcrow" pageScroll href="#section-1.3.1.1-1.4.1">¶</a></p>
+                          the participants private key<a class="pilcrow" pageScroll href="#section-1.3.1.1-1.4.1">¶</a></p>
                       </li>
                     </ol>
                   </section>
@@ -376,8 +376,8 @@
                       smaller than (1372 - (transport protocol
                       overhead)) bytes. This is to ensure that an event
                       block can be transmitted over is smaller thant
-                      the maxiumum transmission unit (MTU) of 1500
-                      bytes (citiation). Events larger than to prevent
+                      the maximum transmission unit (MTU) of 1500 bytes
+                      (citation). Events larger than to prevent
                       decreased performance from packet fragmentation
                       (needs evidence). NB: current golang
                       implementation has no limitation on event size as
@@ -424,7 +424,7 @@
 
                 <ol class="normal" id="section-1.3.3-2" start="1" type="1">
                   <li id="section-1.3.3-2.1">
-                    <p id="section-1.3.3-2.1.1">Particpant's ID: the
+                    <p id="section-1.3.3-2.1.1">Participant's ID: the
                       participants public key<a class="pilcrow" pageScroll href="#section-1.3.3-2.1.1">¶</a></p>
                   </li>
                 </ol>
@@ -445,7 +445,7 @@
             <p id="section-1.4-2">A participant may send a synchronise
               events request to another participant. The requesting
               participant sends a list of events to the the participant
-              it wishes to synchronise with. The responding participatn
+              it wishes to synchronise with. The responding participant
               responds with a<a class="pilcrow" pageScroll href="#section-1.4-2">¶</a></p>
 
             <p id="section-1.4-3">A participant can create an event
@@ -464,9 +464,9 @@
                   with random participants.<a class="pilcrow" pageScroll href="#section-1.4.1-1">¶</a></p>
 
                 <p id="section-1.4.1-2">A participant "gossips" by
-                  randomnly selecting two other participants and
-                  sending them a sync request. The participants respond
-                  with a sync response.<a class="pilcrow" pageScroll href="#section-1.4.1-2">¶</a></p>
+                  randomly selecting two other participants and sending
+                  them a sync request. The participants respond with a
+                  sync response.<a class="pilcrow" pageScroll href="#section-1.4.1-2">¶</a></p>
 
                 <p id="section-1.4.1-3">Participants must gossip
                   continuously at a configurable interval. The interval
@@ -552,7 +552,7 @@
 
                     <p id="section-1.5.2.1-1">An event that has
                       ancestor events that have been created by 2/3 of
-                      the particpants is a super-ancestored event.<a class="pilcrow" pageScroll href="#section-1.5.2.1-1">¶</a></p>
+                      the participants is a super-ancestored event.<a class="pilcrow" pageScroll href="#section-1.5.2.1-1">¶</a></p>
                   </section>
                 </div>
 
@@ -633,7 +633,7 @@
                   <section id="section-1.5.3.1">
                     <h5 id="name-event-finality"> <a class="section-number selfRef" pageScroll href="#section-1.5.3.1">1.5.3.1. </a><a class="section-name selfRef" pageScroll href="#name-event-finality">Event Finality</a></h5>
 
-                    <p id="section-1.5.3.1-1">Event that have occured
+                    <p id="section-1.5.3.1-1">Event that have occurred
                       prior to the Atropos block are final.<a class="pilcrow" pageScroll href="#section-1.5.3.1-1">¶</a></p>
 
                     <p id="section-1.5.3.1-2">TO DO<a class="pilcrow" pageScroll href="#section-1.5.3.1-2">¶</a></p>
@@ -658,16 +658,14 @@
       <section id="section-appendix.a">
         <h2 id="name-authors-address"> <a class="section-name selfRef" pageScroll href="#name-authors-address">Author's Address</a></h2>
 
+        
 
-
-        <div class="left" dir="auto"><span class="fn nameRole">Rishab
-          Sharma</span></div>
+        <div class="left" dir="auto"><span class="fn nameRole">Fantom
+          Foundation</span></div>
 
         <div class="left" dir="auto"><span class="org">Fantom
           Foundation</span></div>
-
-        <div class="email"> <span>Email:</span> <a class="email" href="mailto:rishab.sharma@fantom.foundation">rishab.sharma@fantom.foundation</a></div>
       </section>
     </div>
 
-
+    
