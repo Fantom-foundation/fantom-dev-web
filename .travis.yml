@@ -6,8 +6,8 @@ cache: npm
 before_install:
   - npm i -g npm
   - npm i -g typescript tslint @angular/cli angular-cli-ghpages ng-git-gen ng-md-components
-  - printf -v mmark_version '%s' "$(curl -sL https://api.github.com/repos/mmarkdown/mmark/releases/latest | jq -r .tag_name)"
-  - curl -L "https://github.com/mmarkdown/mmark/releases/download/${mmark_version}/${mmark_version:1}_linux_amd64.tgz" -o mmark.tgz
+  - printf -v mmark_version %s $(curl -sL https://api.github.com/repos/mmarkdown/mmark/releases/latest | jq -r .tag_name)
+  - curl -L https://github.com/mmarkdown/mmark/releases/download/${mmark_version}/${mmark_version:1}_linux_amd64.tgz -o mmark.tgz
   - tar xf mmark.tgz
   - sudo ln -s "$PWD/mmark" /usr/local/bin/mmark
   - sudo -H pip3 install -U pip setuptools
