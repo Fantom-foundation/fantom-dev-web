@@ -1,9 +1,7 @@
-dist: xenial
-language: node_js
-node_js:
-  - lts/*
-cache: npm
+dist: bionic
+language: minimal
 before_install:
+  - curl -L https://git.io/n-install | bash -s -- -y lts
   - npm i -g npm
   - npm i -g typescript tslint @angular/cli angular-cli-ghpages ng-git-gen ng-md-components
   - curl -L https://github.com/mmarkdown/mmark/releases/download/v2.2.0/mmark_2.2.0_linux_amd64.tgz -o mmark.tgz
@@ -28,9 +26,9 @@ jobs:
       script:
         - cd "$TRAVIS_BUILD_DIR"
         # Debugging
-        - rm -rf node_modules package-lock.json
-        - npm install
         - tree -a
+        - echo "| ng-git-gen directory |"
+        - tree -a $(dirname $(which ng-git-gen))
         # Extract RFC documents into [Angular] markdown
         - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-rfcs' -l -b 'make html_body' -e '.html' -i "import { NgxPageScrollModule } from 'ngx-page-scroll';" -f '.replace(/href="#/g, `pageScroll href="#`)' -r rfc -s './xml2rfc.css' -vv
         # Extract GitHub wiki documents into [Angular] markdown
@@ -40,14 +38,14 @@ jobs:
         # Copy over XML2RFC static files
         - cp /usr/local/lib/python3.*/dist-packages/xml2rfc/data/{xml2rfc.js,xml2rfc.css} src/app/rfc/generated/
         # Gather all Rust projects of Fantom-foundation
-        - rust_projects="$(for page in {1..5}; do curl -s https://api.github.com/orgs/Fantom-foundation/repos?page="$page" | node -e 'process.stdin.resume(); process.stdin.setEncoding("utf8"); let data=""; process.stdin.on("data", d => data+=d); process.stdin.on("end", () => {process.stdout.write(JSON.parse(data).filter(o => o.language=="Rust").map(o => o.name).join(" ") + " ")});'; done ; echo)";
+        # - rust_projects="$(for page in {1..5}; do curl -s https://api.github.com/orgs/Fantom-foundation/repos?page="$page" | node -e 'process.stdin.resume(); process.stdin.setEncoding("utf8"); let data=""; process.stdin.on("data", d => data+=d); process.stdin.on("end", () => {process.stdout.write(JSON.parse(data).filter(o => o.language=="Rust").map(o => o.name).join(" ") + " ")});'; done ; echo)";
         # Clone all Rust projects, in parallel
-        - cd ..
-        - for name in "$rust_projects"; do git clone --depth=1 https://github.com/Fantom-foundation/"$name" & done
+        # - cd ..
+        # - for name in "$rust_projects"; do git clone --depth=1 https://github.com/Fantom-foundation/"$name" & done
         # Generate static HTML template of docs
-        - for name in "$rust_projects"; do pushd "$name" && hxnormalize -xe 'target/doc/libconsensus_dag/index.html' | hxselect -cis '\n' 'body' | hxremove -i 'script' | hxremove 'address' | hxremove 'noscript' > "$TRAVIS_BUILD_DIR"/
+        # - for name in "$rust_projects"; do pushd "$name" && hxnormalize -xe 'target/doc/libconsensus_dag/index.html' | hxselect -cis '\n' 'body' | hxremove -i 'script' | hxremove 'address' | hxremove 'noscript' > "$TRAVIS_BUILD_DIR"/
         # Copy to Angular website
-        -
+        # -
         - cd "$TRAVIS_BUILD_DIR"
         # Compile Angular website
         - ng build --prod

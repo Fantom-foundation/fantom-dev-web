@@ -26,6 +26,15 @@ Assumes you have latest Node.JS and npm on *nix machine, then just run:
     npm i -g @angular/cli typescript
     npm i
 
+## Deploy distribution
+First [`npm i -g angular-cli-ghpages`](https://github.com/angular-schule/angular-cli-ghpages), then:
+    ng build --prod
+    cp README.md dist/fantom-dev
+    ngh --dir='dist/fantom-dev' --repo='https://github.com/Fantom-foundation/Fantom-foundation.github.io' --branch='master' --message='Using angular-cli-ghpages'
+
+## Derived
+Header, footer and subpage stolen from [https://material.angular.io](https://material.angular.io) ([src](https://github.com/angular/material.angular.io)).
+
 ---
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.9.
