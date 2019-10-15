@@ -1,14 +1,15 @@
 dist: bionic
-language: minimal
+language: node_js
+node_js:
+  - lts/*
+cache: npm
 before_install:
-  - curl -L https://git.io/n-install | bash -s -- -y lts
-  - export PATH="$PATH:$HOME/n/bin"
   - npm i -g npm
   - npm i -g typescript tslint @angular/cli angular-cli-ghpages ng-git-gen ng-md-components
   - curl -L https://github.com/mmarkdown/mmark/releases/download/v2.2.0/mmark_2.2.0_linux_amd64.tgz -o mmark.tgz
   - tar xf mmark.tgz
   - sudo ln -s "$PWD/mmark" /usr/local/bin/mmark
-  - sudo -H pip3 install -U pip setuptools
+  - sudo -H pip3 install -U pip
   - sudo -H pip3 install wheel
   - sudo -H pip3 install xml2rfc
   - sudo -H pip3 install -U six
@@ -20,16 +21,11 @@ addons:
       - python3-pip
       - python3-html5lib
       - html-xml-utils
-      - tree
 jobs:
   include:
     - stage: deploy
       script:
         - cd "$TRAVIS_BUILD_DIR"
-        # Debugging
-        - tree -a
-        - echo "| node directory |"
-        - tree -a "$HOME/n"
         # Extract RFC documents into [Angular] markdown
         - ng-git-gen -p "$PWD" -g 'https://github.com/Fantom-foundation/fantom-rfcs' -l -b 'make html_body' -e '.html' -i "import { NgxPageScrollModule } from 'ngx-page-scroll';" -f '.replace(/href="#/g, `pageScroll href="#`)' -r rfc -s './xml2rfc.css' -vv
         # Extract GitHub wiki documents into [Angular] markdown
