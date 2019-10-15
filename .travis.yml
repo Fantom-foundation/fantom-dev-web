@@ -6,10 +6,11 @@ cache: npm
 before_install:
   - npm i -g npm
   - npm i -g typescript tslint @angular/cli angular-cli-ghpages ng-git-gen ng-md-components
-  - curl -L https://github.com/mmarkdown/mmark/releases/download/v2.2.0/mmark_2.2.0_linux_amd64.tgz -o mmark.tgz
+  - printf -v mmark_version '%s' "$(curl -sL https://api.github.com/repos/mmarkdown/mmark/releases/latest | jq -r .tag_name)"
+  - curl -L "https://github.com/mmarkdown/mmark/releases/download/${mmark_version}/${mmark_version:1}_linux_amd64.tgz" -o mmark.tgz
   - tar xf mmark.tgz
   - sudo ln -s "$PWD/mmark" /usr/local/bin/mmark
-  - sudo -H pip3 install -U pip
+  - sudo -H pip3 install -U pip setuptools
   - sudo -H pip3 install wheel
   - sudo -H pip3 install xml2rfc
   - sudo -H pip3 install -U six
@@ -21,6 +22,7 @@ addons:
       - python3-pip
       - python3-html5lib
       - html-xml-utils
+      - jq
 jobs:
   include:
     - stage: deploy
@@ -47,7 +49,7 @@ jobs:
         # Compile Angular website
         - ng build --prod
         # Deploy to GitHub Pages
-        - cp *.md dist/fantom-dev && ngh --dir='dist/fantom-dev' --repo=https://GH_TOKEN@github.com/Fantom-foundation/Fantom-foundation.github.io --name="$(git log -1 --pretty=format:'%an')" --branch='master' --message="$TRAVIS_COMMIT_MESSAGE"
+        - cp *.md 'dist/fantom-dev' && ngh --dir='dist/fantom-dev' --repo='https://GH_TOKEN@github.com/Fantom-foundation/Fantom-foundation.github.io' --name="$(git log -1 --pretty=format:'%an')" --branch='master' --message="$TRAVIS_COMMIT_MESSAGE"
 branches:
   only:
     - master
