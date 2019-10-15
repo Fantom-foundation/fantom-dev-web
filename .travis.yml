@@ -2,6 +2,7 @@ dist: bionic
 language: minimal
 before_install:
   - curl -L https://git.io/n-install | bash -s -- -y lts
+  - export PATH="$PATH:$HOME/n/bin"
   - npm i -g npm
   - npm i -g typescript tslint @angular/cli angular-cli-ghpages ng-git-gen ng-md-components
   - curl -L https://github.com/mmarkdown/mmark/releases/download/v2.2.0/mmark_2.2.0_linux_amd64.tgz -o mmark.tgz
