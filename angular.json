@@ -3,9 +3,13 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "fantom-dev": {
+    "fantom-dev-web": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -13,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/fantom-dev",
+            "outputPath": "dist/fantom-dev-web",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -65,18 +69,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "fantom-dev:build"
+            "browserTarget": "fantom-dev-web:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "fantom-dev:build:production"
+              "browserTarget": "fantom-dev-web:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fantom-dev:build"
+            "browserTarget": "fantom-dev-web:build"
           }
         },
         "test": {
@@ -91,7 +95,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -113,16 +117,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "fantom-dev:serve"
+            "devServerTarget": "fantom-dev-web:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "fantom-dev:serve:production"
+              "devServerTarget": "fantom-dev-web:serve:production"
             }
           }
         }
       }
-    }
-  },
-  "defaultProject": "fantom-dev"
+    }},
+  "defaultProject": "fantom-dev-web"
 }
