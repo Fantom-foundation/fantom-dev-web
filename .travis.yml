@@ -49,6 +49,9 @@ jobs:
         # Compile Angular website
         - ng build --prod
         # Deploy to GitHub Pages
+        - email_author="$(git log -1 --pretty=format:'%an <%ce>')"
+        - author="${email_author% *}"; git config --global user.name "$author"
+        - email="${email_author#*<}"; email="${email::-1}"; git config --global user.email "$email"
         - cp *.md 'dist/fantom-dev-web' && ngh --dir='dist/fantom-dev-web' --repo='https://GH_TOKEN@github.com/Fantom-foundation/Fantom-foundation.github.io' --name="$(git log -1 --pretty=format:'%an')" --branch='master' --message="$TRAVIS_COMMIT_MESSAGE"
 branches:
   only:
