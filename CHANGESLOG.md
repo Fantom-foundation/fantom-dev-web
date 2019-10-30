@@ -37,3 +37,4 @@ Expect this file to be appended by various automated processes.
 
 [src/lib.rs] Vectorising `test_initialise_network`](https://github.com/Fantom-foundation/libconsensus-dag/commit/a2fae0eb695bd329fd8a20e9ecbcfb38d12138cd) |
   | [Fantom-foundation/libtransport-tcp](https://github.com/Fantom-foundation/libtransport-tcp) | [Fix receiving a part of data from TcpStream instead of the whole](https://github.com/Fantom-foundation/libtransport-tcp/commit/a2db8a0b1b975b91b603c8fe233b378d5b2207df) |
+  | [Fantom-foundation/libtransport-tcp](https://github.com/Fantom-foundation/libtransport-tcp) | [Merge a2db8a0b1b975b91b603c8fe233b378d5b2207df into e4ed04698d26247873b98c1fd64cf923b701d08c](https://github.com/Fantom-foundation/libtransport-tcp/commit/21130ccd86fc6d943dc29e03e0456c6d74b90bf4) |
