@@ -33,3 +33,6 @@ Expect this file to be appended by various automated processes.
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [fix clippy warnings](https://github.com/Fantom-foundation/libconsensus-dag/commit/247ce14a3bb15527cb116b79af2205cae35f7bbf) |
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [make vectorised test work](https://github.com/Fantom-foundation/libconsensus-dag/commit/f81cef8bee76c53333abe345defcfda0b498b176) |
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Merge f81cef8bee76c53333abe345defcfda0b498b176 into 247ce14a3bb15527cb116b79af2205cae35f7bbf](https://github.com/Fantom-foundation/libconsensus-dag/commit/562fbe02e5d54522c9300bf81d7c5dd5e5e2f817) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Merge pull request #6 from Fantom-foundation/vectorise-test
+
+[src/lib.rs] Vectorising `test_initialise_network`](https://github.com/Fantom-foundation/libconsensus-dag/commit/a2fae0eb695bd329fd8a20e9ecbcfb38d12138cd) |
