@@ -41,3 +41,4 @@ Expect this file to be appended by various automated processes.
   | [Fantom-foundation/libtransport-tcp](https://github.com/Fantom-foundation/libtransport-tcp) | [Merge pull request #6 from Fantom-foundation/receiver-fix
 
 Fix receiving a part of data from TcpStream instead of the whole](https://github.com/Fantom-foundation/libtransport-tcp/commit/182894666f1edae0ff6c91ee7f1633e74d53f1ee) |
+  | [Fantom-foundation/libtransport-tcp](https://github.com/Fantom-foundation/libtransport-tcp) | [transfer raid-7's fix to TCPTransport; flip version up](https://github.com/Fantom-foundation/libtransport-tcp/commit/35ad6f4967c8eca5dcdb281976de2cfbe8b0df06) |
