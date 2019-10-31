@@ -42,3 +42,4 @@ Expect this file to be appended by various automated processes.
 
 Fix receiving a part of data from TcpStream instead of the whole](https://github.com/Fantom-foundation/libtransport-tcp/commit/182894666f1edae0ff6c91ee7f1633e74d53f1ee) |
   | [Fantom-foundation/libtransport-tcp](https://github.com/Fantom-foundation/libtransport-tcp) | [transfer raid-7's fix to TCPTransport; flip version up](https://github.com/Fantom-foundation/libtransport-tcp/commit/35ad6f4967c8eca5dcdb281976de2cfbe8b0df06) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [increase proc_a start delay to 3sec; bump libtransport-tcp version up;  bump version up](https://github.com/Fantom-foundation/libconsensus-dag/commit/126e28f60a2137391f4a263433c4998b03dcb47a) |
