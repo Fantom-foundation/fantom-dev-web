@@ -57,3 +57,4 @@ some typos fixes](https://github.com/Fantom-foundation/libconsensus-dag/commit/d
   | [Fantom-foundation/libvm](https://github.com/Fantom-foundation/libvm) | [upgrade to libconsensus v0.1.0](https://github.com/Fantom-foundation/libvm/commit/f17e652901d68b8a53e209b79f87772bb5d0d7f2) |
   | [Fantom-foundation/libconsensus](https://github.com/Fantom-foundation/libconsensus) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libconsensus/commit/05741644fde8c871c40c2298d5345647acf28b5f) |
   | [Fantom-foundation/libvm](https://github.com/Fantom-foundation/libvm) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libvm/commit/39c1d5109ebb0607de55f614df03abe080f5b439) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libconsensus-dag/commit/7e3d6a80148ecb6a187e31dc525ea058ada4b0e3) |
