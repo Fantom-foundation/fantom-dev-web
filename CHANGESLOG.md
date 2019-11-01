@@ -52,3 +52,4 @@ Fix receiving a part of data from TcpStream instead of the whole](https://github
 
 some typos fixes](https://github.com/Fantom-foundation/libconsensus-dag/commit/d01e2d669609c0965d9494b7af42cd25f369dcc3) |
   | [Fantom-foundation/libvm](https://github.com/Fantom-foundation/libvm) | [Lets move this into the actual implementation](https://github.com/Fantom-foundation/libvm/commit/abea0eab2ca2b7d7298464edcc3efd378eb6de35) |
+  | [Fantom-foundation/libconsensus](https://github.com/Fantom-foundation/libconsensus) | [add PeerId into Item of Consensus stream](https://github.com/Fantom-foundation/libconsensus/commit/664b64fd41c47509cf4dfb309e303f60f56b39f3) |
