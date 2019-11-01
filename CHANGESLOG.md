@@ -52,3 +52,4 @@ Expect this file to be appended by various automated processes.
   | [Fantom-foundation/libconsensus](https://github.com/Fantom-foundation/libconsensus) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libconsensus/commit/05741644fde8c871c40c2298d5345647acf28b5f) |
   | [Fantom-foundation/libvm](https://github.com/Fantom-foundation/libvm) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libvm/commit/39c1d5109ebb0607de55f614df03abe080f5b439) |
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libconsensus-dag/commit/7e3d6a80148ecb6a187e31dc525ea058ada4b0e3) |
+  | [Fantom-foundation/libvm](https://github.com/Fantom-foundation/libvm) | [flip version up](https://github.com/Fantom-foundation/libvm/commit/e00c5d201403d5ae492fadeb694e7662a58dd60f) |
