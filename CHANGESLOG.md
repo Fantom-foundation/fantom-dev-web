@@ -51,3 +51,4 @@ Fix receiving a part of data from TcpStream instead of the whole](https://github
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Merge pull request #7 from Fantom-foundation/typo_fixes
 
 some typos fixes](https://github.com/Fantom-foundation/libconsensus-dag/commit/d01e2d669609c0965d9494b7af42cd25f369dcc3) |
+  | [Fantom-foundation/libvm](https://github.com/Fantom-foundation/libvm) | [Lets move this into the actual implementation](https://github.com/Fantom-foundation/libvm/commit/abea0eab2ca2b7d7298464edcc3efd378eb6de35) |
