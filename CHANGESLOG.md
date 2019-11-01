@@ -48,3 +48,6 @@ Fix receiving a part of data from TcpStream instead of the whole](https://github
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [make set_public_key() public](https://github.com/Fantom-foundation/libconsensus-dag/commit/aac423a4b9f49827dc133a3648b245fe8d064dde) |
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [some typo fixes](https://github.com/Fantom-foundation/libconsensus-dag/commit/6b358005d90562ba52b4b481bd81286ed64cf43d) |
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Merge 6b358005d90562ba52b4b481bd81286ed64cf43d into aac423a4b9f49827dc133a3648b245fe8d064dde](https://github.com/Fantom-foundation/libconsensus-dag/commit/2a67ce62ff2bf36b03a44354a786be892c34aaa7) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Merge pull request #7 from Fantom-foundation/typo_fixes
+
+some typos fixes](https://github.com/Fantom-foundation/libconsensus-dag/commit/d01e2d669609c0965d9494b7af42cd25f369dcc3) |
