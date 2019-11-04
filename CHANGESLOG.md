@@ -54,3 +54,4 @@ Expect this file to be appended by various automated processes.
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libconsensus-dag/commit/7e3d6a80148ecb6a187e31dc525ea058ada4b0e3) |
   | [Fantom-foundation/libvm](https://github.com/Fantom-foundation/libvm) | [flip version up](https://github.com/Fantom-foundation/libvm/commit/e00c5d201403d5ae492fadeb694e7662a58dd60f) |
   | [Fantom-foundation/full-cli-rs](https://github.com/Fantom-foundation/full-cli-rs) | [[src/main.rs] Remove loop](https://github.com/Fantom-foundation/full-cli-rs/commit/c6c4ae7ecafb2d8598bf2e013ac06c7dfacf29cc) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [[Cargo.toml] Upgrade sled](https://github.com/Fantom-foundation/libconsensus-dag/commit/8f97646358ef4d00d81f5e856161ef7d107ce12e) |
