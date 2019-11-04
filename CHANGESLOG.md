@@ -56,3 +56,6 @@ Expect this file to be appended by various automated processes.
   | [Fantom-foundation/full-cli-rs](https://github.com/Fantom-foundation/full-cli-rs) | [[src/main.rs] Remove loop](https://github.com/Fantom-foundation/full-cli-rs/commit/c6c4ae7ecafb2d8598bf2e013ac06c7dfacf29cc) |
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [[Cargo.toml] Upgrade sled](https://github.com/Fantom-foundation/libconsensus-dag/commit/8f97646358ef4d00d81f5e856161ef7d107ce12e) |
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Merge 8f97646358ef4d00d81f5e856161ef7d107ce12e into 7e3d6a80148ecb6a187e31dc525ea058ada4b0e3](https://github.com/Fantom-foundation/libconsensus-dag/commit/480bf0ee3e9c47f4625052692a1a69acbc9c7ffd) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Merge pull request #8 from Fantom-foundation/sled
+
+[Cargo.toml] Upgrade sled](https://github.com/Fantom-foundation/libconsensus-dag/commit/1f9ec3570c70d51c060cfc5eba8d76f938890dcb) |
