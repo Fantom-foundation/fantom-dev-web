@@ -60,3 +60,4 @@ Expect this file to be appended by various automated processes.
 
 [Cargo.toml] Upgrade sled](https://github.com/Fantom-foundation/libconsensus-dag/commit/1f9ec3570c70d51c060cfc5eba8d76f938890dcb) |
   | [Fantom-foundation/libconsensus](https://github.com/Fantom-foundation/libconsensus) | [Allow `send_transaction` on immutable instance](https://github.com/Fantom-foundation/libconsensus/commit/d8e5ab00077f9ea8be44f0b901d8e117bf03ed8a) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Specify lifetime explicitly](https://github.com/Fantom-foundation/libconsensus-dag/commit/b14236f9ff06e87253398794fc2517fd104b0927) |
