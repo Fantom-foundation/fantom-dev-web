@@ -52,3 +52,12 @@ Expect this file to be appended by various automated processes.
   | [Fantom-foundation/libconsensus](https://github.com/Fantom-foundation/libconsensus) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libconsensus/commit/05741644fde8c871c40c2298d5345647acf28b5f) |
   | [Fantom-foundation/libvm](https://github.com/Fantom-foundation/libvm) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libvm/commit/39c1d5109ebb0607de55f614df03abe080f5b439) |
   | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [[Cargo.toml] Fixed version numbering](https://github.com/Fantom-foundation/libconsensus-dag/commit/7e3d6a80148ecb6a187e31dc525ea058ada4b0e3) |
+  | [Fantom-foundation/libvm](https://github.com/Fantom-foundation/libvm) | [flip version up](https://github.com/Fantom-foundation/libvm/commit/e00c5d201403d5ae492fadeb694e7662a58dd60f) |
+  | [Fantom-foundation/full-cli-rs](https://github.com/Fantom-foundation/full-cli-rs) | [[src/main.rs] Remove loop](https://github.com/Fantom-foundation/full-cli-rs/commit/c6c4ae7ecafb2d8598bf2e013ac06c7dfacf29cc) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [[Cargo.toml] Upgrade sled](https://github.com/Fantom-foundation/libconsensus-dag/commit/8f97646358ef4d00d81f5e856161ef7d107ce12e) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Merge 8f97646358ef4d00d81f5e856161ef7d107ce12e into 7e3d6a80148ecb6a187e31dc525ea058ada4b0e3](https://github.com/Fantom-foundation/libconsensus-dag/commit/480bf0ee3e9c47f4625052692a1a69acbc9c7ffd) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Merge pull request #8 from Fantom-foundation/sled
+
+[Cargo.toml] Upgrade sled](https://github.com/Fantom-foundation/libconsensus-dag/commit/1f9ec3570c70d51c060cfc5eba8d76f938890dcb) |
+  | [Fantom-foundation/libconsensus](https://github.com/Fantom-foundation/libconsensus) | [Allow `send_transaction` on immutable instance](https://github.com/Fantom-foundation/libconsensus/commit/d8e5ab00077f9ea8be44f0b901d8e117bf03ed8a) |
+  | [Fantom-foundation/libconsensus-dag](https://github.com/Fantom-foundation/libconsensus-dag) | [Specify lifetime explicitly](https://github.com/Fantom-foundation/libconsensus-dag/commit/b14236f9ff06e87253398794fc2517fd104b0927) |
